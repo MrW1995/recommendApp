@@ -4,18 +4,33 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_978826_lbaf2osn9nd.css">
     <title>info_recommend_webpack</title>
-    <script>
-      if ('addEventListener' in document) {
+    <script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
+      <script>
+        <!--这段代码的作用是获取当前的font-size的大小-->
+        document.documentElement.style.fontSize =  document.documentElement.clientWidth / 375 * 100 + 'px'
+
+        if ('addEventListener' in document) {
         document.addEventListener('DOMContentLoaded', function() {
-          FastClick.attach(document.body);
+        FastClick.attach(document.body);
         }, false);
-      }
-      if(!window.Promise) {
+        }
+        if(!window.Promise) {
         document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+        }
+      </script>
+    <style>
+      *{
+        font-family:  "Microsoft YaHei";
+        /*touch-action: none;*/
       }
-    </script>
+      body,html{
+        background-color: 	#E0E0E0;
+        margin:0;
+        padding:0;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
