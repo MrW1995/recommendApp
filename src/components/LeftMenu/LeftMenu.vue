@@ -1,112 +1,74 @@
 <template>
-    <div>
-      <div class="left-menu" :class="{isdisplay:!true}">
-        <!--遮罩层-->
-        <div class="showshade"></div>
-        <!--右边弹出菜单-->
-        <div class="menu-sort">
-          <div class="menu">
-            <div class="menu-title">
-              <span>分类</span>
-            </div>
-            <div class="setting-float ">
-              <i class="iconfont icon-huwaixiuxi iconfont-float"></i>
-              <span class="public-fontsize park">公园</span>
-            </div>
-            <div class="setting-float">
-              <i class="iconfont icon-fengjing iconfont-float"></i>
-              <span class="public-fontsize">风景区</span>
-            </div>
-
-            <div class="setting-float">
-              <i class="iconfont  icon-youleyuan iconfont-float"></i>
-              <span class="public-fontsize">游乐园</span>
-            </div>
-            <div class="setting-float">
-              <i class="iconfont icon-dongwuyuan iconfont-float"></i>
-              <span class="public-fontsize">动物园</span>
-            </div>
-            <div class="setting-float">
-              <i class="iconfont icon-zhiwuyuan iconfont-float"></i>
-              <span class="public-fontsize">植物园</span>
-            </div>
-            <div class="setting-float">
-              <i class="iconfont icon-bowuguan iconfont-float"></i>
-              <span class="public-fontsize">博物馆</span>
-            </div>
-            <div class="setting-float">
-              <a class="a">
-                <i class="iconfont icon-yu iconfont-float"></i>
-                <span class="public-fontsize">水族馆</span>
-              </a>
-            </div>
-            <div class="setting-float">
-              <i class="iconfont icon-lvyoujianzhumingshenggujitourism-ribensimiao iconfont-float"></i>
-              <span class="public-fontsize">名胜古迹</span>
-            </div>
-          </div>
-          <i class="iconfont icon-guanbi"></i>
-        </div>
-      </div>
-    </div>
+  <div class="NavSlide">
+    <nav>
+      <p v-for="(item,$index) in arr" @click="toggle($index,item)"><router-link to="/" :class="{active:$index==active}">{{item}}</router-link></p>
+      <!--<p class="fixadd">-->
+        <!--<router-link to="/Select" >-->
+          <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>-->
+        <!--</router-link>-->
+      <!--</p>-->
+    </nav>
+  </div>
 </template>
 
 <script>
-  export default {}
+  export default {
+    data:function(){
+      return {
+        active:0,
+        arr:[
+          "所有",
+          "公园",
+          "风景区",
+          "游乐园",
+          "动物园",
+          "植物园",
+          "博物馆",
+          "水族馆",
+          "名胜古迹",
+        ]
+      }
+    },
+    methods:{
+      toggle(index,item){
+        this.active=index
+        console.log(index,item)
+      }
+    }
+  }
+
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  .left-menu
-    position:absolute
-    top:0.74rem
-    &.isdisplay
-      display: none;
-    .showshade
-      float: left
-      width: 3.75rem
-      height: 5.93rem
-      background: black
-      position: relative
-      opacity: 0.3
-      z-index: 19
-      /*display none*/
-    .menu-sort
-      float: left
-      width:1.5rem
-      height:5.93rem
+  .NavSlide
+    width: 100%
+    overflow:hidden
+    z-index 100
+    color red
+    nav
+      padding: 0 0.12rem
+      display: -webkit-box
+      display: -ms-flexbox
+      display: flex
+      -webkit-box-align: middle
+      -ms-flex-align: middle
+      align-items: middle
+      overflow: auto
       background-color: white
-      position: fixed
-      z-index: 21
-      .icon-guanbi
-        float: right
-        font-size :0.18rem
-        margin: 0.04rem 0.06rem 0 0
-      .menu
-        float: left
-        width:1.1rem
-        height:5.93rem
-        background: white
-        border-right:1px solid gray
-        .menu-title
-          float: left
-          width: 1.1rem
-          font-size: 0.2rem
-          text-align: center
-          font-weight: bold
-          color: white
-          background-color: #3366FF
-        .setting-float
-          float: left
-          margin: 0.08rem 0 0.2rem 0.03rem
-          &:hover
-            color:#3366FF
-            font-weight:bold
-          .iconfont-float
-            float: left
-          .public-fontsize
-            float: left
-            margin: 0.03rem 0 0 0.03rem
-            font-size: 0.18rem
-          .park
-            width: 0.6rem
+      p
+        text-align: center
+        font-size: 0.18rem
+        -ms-flex-negative: 0
+        flex-shrink: 0
+        padding: 0.01rem
+        margin: 0.081rem
+
+  .NavSlide p a  //统一字体设置
+    color: gray
+    text-decoration: none
+
+  .NavSlide p a.active  //关于单击字体的设置
+    color: blue
+
+
 </style>

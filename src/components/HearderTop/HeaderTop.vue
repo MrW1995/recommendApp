@@ -2,18 +2,16 @@
     <div>
       <div class="header-top">
         <div class="header">
-          <!--<p class="font-home">首页</p>-->
-          <i class="iconfont icon-chaxun1"></i>
+          <div class="select-sort" :class="{addbold:true}">
+            <label class="select-label-1">综合</label>
+            <label class="select-label-2">最热</label>
+            <label class="select-label-3">最近</label>
+          </div>
           <i class="iconfont icon-fabu"></i>
         </div>
         <div class="sort">
-          <i class="iconfont icon-caidan" :class="{isshow:true}"></i>
-          <i class="iconfont icon-caidan transform" :class="{isshow:false}" ></i>
-          <div class="radiochoose">
-            <label>综合<input type="radio" name="change" value=""></label>
-            <label>最新<input type="radio" name="change" value=""></label>
-            <label>最热<input type="radio" name="change" value=""></label>
-          </div>
+          <SearchInput v-if="!false"></SearchInput>
+          <LeftMenu v-if="false"></LeftMenu>
           <div class="clearfloat"></div>
         </div>
       </div>
@@ -21,9 +19,13 @@
 </template>
 
 <script>
-
+  import LeftMenu from '../LeftMenu/LeftMenu'
+  import SearchInput from '../Search/SearchInput'
   export default {
-
+    components:{
+      LeftMenu,
+      SearchInput
+    }
   }
 </script>
 
@@ -37,26 +39,32 @@
       height: 0.40rem
       display: flex
       background-color: #3366FF
+      border:none
       color: white
-      .icon-chaxun1
-        margin:0.075rem 0 0 2.8rem
+      .select-sort
+        float: left
+        margin: 0.02rem 0 0 0.5rem
+        font-size: 0.28rem
+        .select-label-2
+          margin-left 0.2rem
+          &.addbold
+            font-weight bold
+        .select-label-3
+          margin-left 0.2rem
+          &.addbold
+            font-weight bold
       .icon-fabu
-        margin:0.075rem 0 0 0.2rem
+        font-size:0.3rem
+        margin:0.075rem 0 0 0.5rem
     .sort
+      float left
       width:3.75rem
-      background-color: white
-      margin:0
-      border-bottom: 1px solid gray
-      /*display none*/
-      .radiochoose
-        float: left
-        margin: 0.04rem 0 0 0.12rem
-        font-size: 0.2rem
-      .icon-caidan
-        float: left
-        margin: 0.05rem 0 0 0.08rem
-        &.transform
-          transform: rotate(90deg)
-        &.isshow
-          display: none
+      height:0.42rem
+      background-color: #3366FF
+      display:flex
+      flex-flow: column
+      border-bottom: 1px solid red
+      margin-top -1px
+      z-index 11
+
 </style>

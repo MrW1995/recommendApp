@@ -36,7 +36,11 @@
 <script>
   import BScroll from 'better-scroll'
   export default {
+    created(){
+
+    },
     mounted() {
+      this.$store.dispatch('receiveAb')
       this.$nextTick(() =>{
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.wrapper, {
@@ -65,7 +69,7 @@
   .wrapper
     width: 3.75rem
     position:absolute
-    top: 0.75rem
+    top: 0.83rem
     bottom: 0.57rem
     overflow: hidden
     z-index: 1

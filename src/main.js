@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import {Button,Tabbar,TabItem,Search } from "mint-ui"
 import router from './router/index'
+import './mock/mockServer'
+import store from './store'
 Vue.config.productionTip = false
 Vue.component(Button.name,Button)
 Vue.component(Tabbar.name,Tabbar)
@@ -15,5 +17,6 @@ new Vue({
   el: '#app',
   components: { App },
   template: '<App/>',
-  router
+  router,
+  store
 })

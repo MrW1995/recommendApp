@@ -8,7 +8,7 @@ const Scenic = () =>import('../pages/ShowScenic/ShowScenic')
 const StudySource = () =>import('../pages/StudySource/StudySource')
 const Laugh = () =>import('../pages/Share/Share')
 const Personal = () =>import('../pages/Personal/Personal')
-
+const Search = () =>import('../pages/Search/Search')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -33,8 +33,13 @@ export default new VueRouter({
       component:Personal
     },
     {
+      path:'/search',
+      component:Search
+    },
+    {
       path:'/',
       redirect:'/scenic'
     },
+
   ]
 })
