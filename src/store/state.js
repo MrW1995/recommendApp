@@ -3,5 +3,6 @@
 * */
 
 export default {
+  isShowSearche:false,
   scenics:[]
 }

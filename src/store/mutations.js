@@ -5,7 +5,7 @@ import {
   RECEIVE_SCENIC
 }from './mutations-types'
 export default {
-  ['RECEIVE_SCENIC'](state,{scenics}){
-      state.scenics = scenics
+  [RECEIVE_SCENIC](state,{scenics}){
+    state.scenics = scenics
   }
 }

@@ -46,7 +46,7 @@
     z-index 100
     color red
     nav
-      padding: 0 0.12rem
+      padding: 0 0.13rem
       display: -webkit-box
       display: -ms-flexbox
       display: flex

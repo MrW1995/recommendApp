@@ -10,8 +10,8 @@
           <i class="iconfont icon-fabu"></i>
         </div>
         <div class="sort">
-          <SearchInput v-if="!false"></SearchInput>
-          <LeftMenu v-if="false"></LeftMenu>
+          <SearchInput v-if="!isShowSearche"></SearchInput>
+          <LeftMenu v-else></LeftMenu>
           <div class="clearfloat"></div>
         </div>
       </div>
@@ -21,11 +21,15 @@
 <script>
   import LeftMenu from '../LeftMenu/LeftMenu'
   import SearchInput from '../Search/SearchInput'
+  import {mapState} from 'vuex'
   export default {
+    computed:{
+      ...mapState(['isShowSearche'])
+    },
     components:{
       LeftMenu,
       SearchInput
-    }
+    },
   }
 </script>
 
@@ -59,8 +63,8 @@
     .sort
       float left
       width:3.75rem
-      height:0.42rem
-      background-color: #3366FF
+      height:0.43rem
+      /*background-color: #3366FF*/
       display:flex
       flex-flow: column
       border-bottom: 1px solid red

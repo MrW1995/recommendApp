@@ -14,13 +14,16 @@
 <style lang="stylus" rel="stylesheet/stylus">
   .search-input
     float left
+    width :3.75rem
+    height:0.43rem
+    background-color: #3366FF
     margin-bottom 0
-    margin:-0.78rem 0 0 0
+
   .mint-button--normal
-    margin-bottom:0
-    margin-left: 0.75rem
+    float left
     width 2.3rem
     height: 0.31rem
+    margin: 0.05rem 0 0 0.7rem
     background-color:	#F8F8F8
     border-radius 0.8rem
     opacity 0.5

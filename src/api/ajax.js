@@ -9,6 +9,7 @@ export default function ajax (url, data={}, type='GET') {
     // 执行异步ajax请求
     let promise
     if (type === 'GET') {
+
       // 准备url query参数数据
       let dataStr = '' //数据拼接字符串
       Object.keys(data).forEach(key => {
@@ -24,6 +25,8 @@ export default function ajax (url, data={}, type='GET') {
       // 发送post请求
       promise = axios.post(url, data)
     }
+
+
     promise.then(function (response) {
       // 成功了调用resolve()
       resolve(response.data)
@@ -33,10 +36,3 @@ export default function ajax (url, data={}, type='GET') {
     })
   })
 }
-
-/*
-const response = await ajax()
-const result = response.data
-
-const resule = await ajax()
- */
