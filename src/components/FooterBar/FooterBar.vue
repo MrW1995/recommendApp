@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" v-if="$route.meta.isShowFooter">
     <div class="move">
       <div class="home" :class="{on:'/scenic'===$route.path}" @click="goTo('/scenic')">
         <i class="iconfont icon-shouye" ></i>

@@ -11,7 +11,7 @@
     props: {
       probeType: {
         type: Number,
-        default: 1
+        default: 2
       },
       click: {
         type: Boolean,
@@ -26,6 +26,10 @@
         default: null
       },
       pullup: {
+        type: Boolean,
+        default: false
+      },
+      pulldown: {
         type: Boolean,
         default: false
       },

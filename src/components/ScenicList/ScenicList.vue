@@ -1,5 +1,6 @@
 <template>
-      <div class="wrapper" ref="wrapper">
+      <!--<div class="wrapper" ref="wrapper">-->
+        <scroll class="wrapper" ref="listContent" :data="scenics" :pulldown="pulldown" @pullingDown="loadData">
           <ul>
               <li class="li-wrapper" v-for="(item,index) in scenics" :key="index">
                 <div class="top-box">
@@ -31,20 +32,27 @@
                 </div>
               </li>
           </ul>
-      </div>
+        </scroll>
+      <!--</div>-->
 </template>
 
 <script>
   import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
+  import scroll from '../../components/Sroll/Scroll'
   export default {
     data(){
       return {
-        scrollY:0
+        scrollY:0,
+        pulldown:true
+
       }
     },
     computed:{
         ...mapState(['scenics'])
+    },
+    components:{
+      scroll
     },
     watch:{
        scrollY(){
@@ -57,19 +65,18 @@
     },
     mounted() {
       this.$store.dispatch('receiveAb')
-      this.$nextTick(() =>{
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.wrapper, {
-            probeType:2
-          });
-        } else {
-          this.scroll.refresh();
-        };
-
-        this.scroll.on('scroll',({x,y}) =>{
-         this.scrollY = Math.abs(y)
-        })
+      setTimeout(() =>{
+        this.$refs.listContent.refresh()
+      },20)
+      this.$refs.listContent.on('scroll',({x,y}) =>{
+        this.scrollY = Math.abs(y)
+        console.log(this.scrollY)
       })
+
+      //   this.scroll.on('scroll',({x,y}) =>{
+      //    this.scrollY = Math.abs(y)
+      //   })
+      // })
     },
     methods:{
       getDateTiem(date){
@@ -93,6 +100,9 @@
           default:
             return date
         }
+      },
+      loadData(){
+          console.log("123")
       }
     }
   }

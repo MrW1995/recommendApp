@@ -3,6 +3,6 @@
 * */
 
 export default {
-  isShowSearche:false,
+  isShowSearche:false,//显示查询还是搜索
   scenics:[]
 }

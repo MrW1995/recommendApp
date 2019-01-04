@@ -17,20 +17,29 @@ export default new VueRouter({
       path:'/scenic',
       component:Scenic,
       meta:{
-        is:true
+        isShowFooter:true
       }
     },
     {
       path:'/studySource',
-      component:StudySource
+      component:StudySource,
+      meta:{
+        isShowFooter:false
+      }
     },
     {
       path:'/laugh',
-      component:Laugh
+      component:Laugh,
+      meta:{
+        isShowFooter:true
+      }
     },
     {
       path:'/personal',
-      component:Personal
+      component:Personal,
+      meta:{
+        isShowFooter:true
+      }
     },
     {
       path:'/search',
