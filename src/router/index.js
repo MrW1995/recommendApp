@@ -24,7 +24,7 @@ export default new VueRouter({
       path:'/studySource',
       component:StudySource,
       meta:{
-        isShowFooter:false
+        isShowFooter:true
       }
     },
     {

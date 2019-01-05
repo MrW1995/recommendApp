@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import {Button,Tabbar,TabItem,Search,Cell,Popup, Navbar,TabContainer,TabContainerItem} from "mint-ui"
+import {Button,Tabbar,TabItem,Search,Cell,Popup, Navbar,TabContainer,TabContainerItem,Badge} from "mint-ui"
 import router from './router/index'
 import './mock/mockServer'
 import store from './store'
@@ -16,6 +16,7 @@ Vue.component(Navbar.name, Navbar)
 Vue.component(Cell.name, Cell)
 Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
+Vue.component(Badge.name, Badge)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

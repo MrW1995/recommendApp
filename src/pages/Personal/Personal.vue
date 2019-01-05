@@ -1,5 +1,5 @@
 <template>
-    <mt-popup class="commentDetail" v-model="popupVisible" popup-transition="popup-fade"  position="bottom">
+    <div class="commentDetail" v-model="popupVisible" popup-transition="popup-fade"  position="bottom">
       <div class="headerBar">
         <div class="header">
           <i class="iconfont icon-guanbi"></i>
@@ -17,7 +17,8 @@
       </div>
       <div class="gudin">
         <scroll class="wrapper" ref="listContent" :data="arr" :pulldown="pulldown" @pullingDown="loadData">
-            <div class="replyContent">
+
+          <div class="replyContent">
                 <div v-for="item in arr">
                   <div class="replyInfo">
                     <div>
@@ -29,10 +30,14 @@
                     </span>
                   </div>
                 </div>
-            </div>
+                <ul>
+                  <li v-for="i in 100" >{{i}}</li>
+                </ul>
+          </div>
+
         </scroll>
       </div>
-    </mt-popup>
+    </div>
 </template>
 
 <script>
@@ -127,13 +132,10 @@
   .gudin
     width 3.75rem
     background-color red
-    overflow hidden
-    height auto
     font-size 0.16rem
     .wrapper
-      width: 3.75rem
       position:absolute
-      top:1.71rem
+      top:1.73rem
       bottom: 0
       overflow: hidden
       background-color: darkgray
