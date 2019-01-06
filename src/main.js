@@ -2,10 +2,12 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import Upload from 'vue-easy-uploader'
 import {Button,Tabbar,TabItem,Search,Cell,Popup, Navbar,TabContainer,TabContainerItem,Badge} from "mint-ui"
 import router from './router/index'
 import './mock/mockServer'
 import store from './store'
+
 Vue.config.productionTip = false
 Vue.component(Button.name,Button)
 Vue.component(Tabbar.name,Tabbar)
@@ -17,6 +19,8 @@ Vue.component(Cell.name, Cell)
 Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(Badge.name, Badge)
+
+Vue.use(Upload,store)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

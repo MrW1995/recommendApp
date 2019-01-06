@@ -10,14 +10,19 @@
       </div>
       <div class="uploadPictureAndVideo">
         <mt-navbar v-model="selected">
-          <mt-tab-item id="1" >选项一</mt-tab-item>
-          <mt-tab-item id="2">选项二</mt-tab-item>
+          <mt-tab-item id="1" >添加图片</mt-tab-item>
+          <mt-tab-item id="2">添加视频</mt-tab-item>
         </mt-navbar>
 
         <mt-tab-container v-model="selected">
           <mt-tab-container-item id="1">
             <div class="upload">
+              <uploader url="http://cn.ynhdkc.com/admin/uploadapiv2/uploadpics">
 
+              </uploader>
+              <!--<div class="btn" @click="upload">-->
+                <!--上传-->
+              <!--</div>-->
             </div>
           </mt-tab-container-item>
           <mt-tab-container-item id="2">
@@ -40,10 +45,15 @@
   export default {
     data(){
       return {
-        selected:'1'
+        selected:'1',
+        imgs: [],
       }
     },
     computed:{
+      ...mapState({
+        imgStatus: state => state.imgstore.img_status,
+        imgPaths: state => state.imgstore.img_paths
+      }),
      isShowPublishScenic:{
        get () {
          return this.$store.state.isShowPublishScenic
@@ -53,9 +63,27 @@
        }
       }
     },
+    watch:{
+      imgStatus () {
+        if (this.imgStatus === 'finished') {
+          this.submit()
+        }
+      }
+    },
     methods:{
       closeWindow(){
         this.$store.commit('change_publish',false)
+      },
+      upload () {
+        this.$store.commit('set_img_status', 'uploading')
+      },
+      submit () {
+        let values = []
+        for (let key of this.imgPaths) {
+          values.push(key)
+        }
+        this.imgs = values
+        console.log(this.imgs)
       }
     }
   }
@@ -93,7 +121,17 @@
       margin 0.1rem 0 0 0.207rem
   .upload
     width 3.3rem
-    height 1.686rem
-    background-color pink
+    height 1.2rem
 
+
+
+  .btn
+    width: 3.75rem
+    height: 1em
+    background-color: green
+    color: #fff
+    display: flex
+    font-size: 0.16rem
+    justify-content: center
+    align-items: center
 </style>

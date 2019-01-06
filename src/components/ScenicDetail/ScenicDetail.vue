@@ -160,7 +160,7 @@
     },
     mounted(){
       setTimeout(() =>{
-        this.scroll.refresh()
+        //this.scroll.refresh()
       },20)
     },
     methods:{
