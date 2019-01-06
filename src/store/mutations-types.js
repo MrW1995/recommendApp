@@ -6,5 +6,11 @@ export const RECEIVE_SCENIC = "receive_scenic"
 
 
 
+//同步请求
+export const CHANGE_DISPLAY = "change_display"
 
+export const CHANGE_PUBLISH = "change_publish"
 
+export const COMMENT_CONTENT = "comment_content"
+
+export const CHANGE_REPLY = "change_reply"

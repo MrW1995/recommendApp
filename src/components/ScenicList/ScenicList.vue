@@ -1,11 +1,11 @@
 <template>
-      <!--<div class="wrapper" ref="wrapper">-->
+      <div>
         <scroll class="wrapper" ref="listContent" :data="scenics" :pulldown="pulldown" @pullingDown="loadData">
           <ul>
               <li class="li-wrapper" v-for="(item,index) in scenics" :key="index">
                 <div class="top-box">
                   <div class="left-box" :class="{noImg:item.img ===''}">
-                    <span class="li-title" :class="{contentMany:item.recomment.length>44}">{{item.recomment}}</span>
+                    <span class="li-title" :class="{contentMany:item.recomment.length>44}" @click="showScenicDetail">{{item.recomment}}</span>
                   </div>
 
                   <div class="right-img" v-if="item.recomment.length<=44">
@@ -33,26 +33,30 @@
               </li>
           </ul>
         </scroll>
-      <!--</div>-->
+        <ScenicDetail class="scenicDetail"></ScenicDetail>
+        <PublishScenic class="publishScenic"></PublishScenic>
+      </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
-  import BScroll from 'better-scroll'
+  import ScenicDetail from '../ScenicDetail/ScenicDetail'
   import scroll from '../../components/Sroll/Scroll'
+  import PublishScenic from '../PublishScenic/PublishScenic'
   export default {
     data(){
       return {
         scrollY:0,
         pulldown:true
-
       }
     },
     computed:{
         ...mapState(['scenics'])
     },
     components:{
-      scroll
+      scroll,
+      ScenicDetail,
+      PublishScenic
     },
     watch:{
        scrollY(){
@@ -66,12 +70,17 @@
     mounted() {
       this.$store.dispatch('receiveAb')
       setTimeout(() =>{
-        this.$refs.listContent.refresh()
+        if(!this.scroll){
+
+        }else {
+          this.$refs.listContent.refresh()
+        }
+
       },20)
-      this.$refs.listContent.on('scroll',({x,y}) =>{
-        this.scrollY = Math.abs(y)
-        console.log(this.scrollY)
-      })
+      // this.$refs.listContent.on('scroll',({x,y}) =>{
+      //   this.scrollY = Math.abs(y)
+      //   console.log(this.scrollY)
+      // })
 
       //   this.scroll.on('scroll',({x,y}) =>{
       //    this.scrollY = Math.abs(y)
@@ -103,13 +112,15 @@
       },
       loadData(){
           console.log("123")
+      },
+      showScenicDetail(){
+        this.$store.commit('change_display',true)
       }
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-
   ul,li //除去ul li 的一些默认配置
     -webkit-margin-before: 0em
     -webkit-margin-after: 0em

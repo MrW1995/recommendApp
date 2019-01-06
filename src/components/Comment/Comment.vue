@@ -1,7 +1,8 @@
 <template>
   <mt-popup class="mtPopup"
-            v-model="popupVisible"
+            v-model="isShowScenicComment"
             position="bottom"
+            :modal="false"
             popup-transition="popup-fade">
 
     <div class="mtheader">
@@ -20,19 +21,27 @@
 
 <script>
   export default {
-    props:{
-      popupVisible:Boolean,
-      default:false
-    },
+    // props:{
+    //   popupVisible:Boolean,
+    //   default:false
+    // },
     data(){
       return{
+        popupVisible:false,
         remaindCount:0,
         allCount:100,
         inputComent:''
       }
     },
     computed:{
-
+      isShowScenicComment:{
+        get(){
+          return this.$store.state.isShowScenicComment
+        },
+        set(value){
+          this.$store.commit('comment_content',value)
+        }
+      }
     },
     watch:{
       inputComent(newVal,oldVal){
@@ -46,14 +55,14 @@
           this.allCount = this.allCount + (oldValLength-newValLength)
         }
       },
-      popupVisible(value){
-        if(this.popupVisible===false)
-          this.$emit('fatherMethod')
-      }
+      // popupVisible(value){
+      //   if(this.popupVisible===false)
+      //     this.$emit('fatherMethod')
+      // }
     },
     methods:{
       closeComment(){
-        this.popupVisible = true
+        this.$store.commit('comment_content',false)
       }
 
     }

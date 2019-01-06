@@ -1,12 +1,12 @@
 <template>
-  <mt-popup class="scenicDetail"  v-model="popupVisible" position="right">
+  <mt-popup class="scenicDetail"  v-model="isShowScenicDetail" position="bottom">
     <div class="header">
-      <i class="iconfont icon-fanhui1"></i>
+      <i class="iconfont icon-fanhui1" @click="closeWindow"></i>
       <span class="scenicTitle">详情</span>
     </div>
 
     <div class="contentbody">
-      <div ref="wrapper" class="wrapper">
+      <scroll :data="arrs" ref="wrapper" class="wrapper" >
         <div>
           <div class="scenicText">
             <div class="publishInfo">
@@ -15,118 +15,116 @@
               <span class="publishDate">{{publishDate}}</span>
             </div>
             <div class="publishText">
-                <span class="text">{{text}}</span>
+              <span class="text">{{text}}</span>
             </div>
 
           </div>
 
           <div class="scenicImgAndVideo">
-              <div class="scenicImg">
-                <ul>
-                  <li v-for="(item,index) in imgs" :key="index" v-if="false">
-                    <img :src="item" alt="" class="pictureSetting">
-                  </li>
-                </ul>
-              </div>
-              <div class="scenicVideo" v-if="!false">
-                <video poster="video/head.png" class="video" controls="controls" preload="preload">
-                  <source src="../../assets/video/video.mp4" type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' >
-                </video>
-              </div>
+            <div class="scenicImg">
+              <ul>
+                <li v-for="(item,index) in imgs" :key="index" v-if="!false">
+                  <img :src="item" alt="" class="pictureSetting">
+                </li>
+              </ul>
+            </div>
+            <div class="scenicVideo" v-if="false">
+              <video poster="video/head.png" class="video" controls="controls" preload="preload">
+                <source src="../../assets/video/video.mp4" type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' >
+              </video>
+            </div>
           </div>
 
           <div class="tag">
-              <div class="TagHeader"></div>
-              <div class="aboutScenic">
-                <span class="ticket">门票: {{ticket}}</span>
-                <div class="scenicSort">
-                    <table>
-                      <tr v-for="(scenicSortArr,index) in scenicSortArrs" :key="index">
-                        <td v-for="(scenic,index) in scenicSortArr" :key="index">
-                          <mt-badge type="primary"> {{scenic}}公园</mt-badge>
-                        </td>
-                      </tr>
-                    </table>
-                </div>
-                <div class="aboutAddress">
-                  <span class="address">地址: </span>
-                  <span class="addressSetting">{{address}}</span>
-                </div>
-
+            <div class="TagHeader"></div>
+            <div class="aboutScenic">
+              <span class="ticket">门票: {{ticket}}</span>
+              <div class="scenicSort">
+                <table>
+                  <tr v-for="(scenicSortArr,index) in scenicSortArrs" :key="index">
+                    <td v-for="(scenic,index) in scenicSortArr" :key="index">
+                      <mt-badge type="primary"> {{scenic}}公园</mt-badge>
+                    </td>
+                  </tr>
+                </table>
               </div>
+              <div class="aboutAddress">
+                <span class="address">地址: </span>
+                <span class="addressSetting">{{address}}</span>
+              </div>
+
+            </div>
           </div>
           <div class="comment">
-              <div class="comentHeader">
-                  <span class="commentCount">{{commentCount}} 评论</span>
-                  <span class="commentOfUser">评论</span>
-              </div>
-              <div class="commentContent">
-                <ul>
-                  <li v-for="i in 8">
-                    <div class="aboutComent">
-                        <img src="http://wx3.sinaimg.cn/large/006DbPTnly1ftobouq00sj30dw0dwjsu.jpg" class="CommentPicture">
-                        <span class="commentName">{{commentName}}</span>
-                        <span class="commentDate">{{commentDate}}</span>
-                    </div>
-                    <div class="commentTextBox">
-                      <span class="commentText">{{commentText}}--{{i}}
+            <div class="comentHeader">
+              <span class="commentCount">{{commentCount}} 评论</span>
+              <span class="commentOfUser" @click="isShowComment(true)">评论</span>
+            </div>
+            <div class="commentContent">
+              <ul>
+                <li v-for="i in 8">
+                  <div class="aboutComent">
+                    <img src="http://wx3.sinaimg.cn/large/006DbPTnly1ftobouq00sj30dw0dwjsu.jpg" class="CommentPicture">
+                    <span class="commentName">{{commentName}}</span>
+                    <span class="commentDate">{{commentDate}}</span>
+                  </div>
+                  <div class="commentTextBox">
+                      <span class="commentText" @click="openReply">{{commentText}}--{{i}}
                         <span class="ReplyComment">回复</span>
                       </span>
-
-                    </div>
-
-                  </li>
-                </ul>
-              </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
+
         </div>
-      </div>
+      </scroll>
     </div>
+
+    <Comment></Comment>
+    <Reply></Reply>
   </mt-popup>
 </template>
+
 <script>
   import scroll from '../../components/Sroll/Scroll'
-  import abc from '../../components/abc/abc'
-  import BScroll from 'better-scroll'
+  import Comment from '../../components/Comment/Comment'
+  import Reply from '../../components/Reply/Reply'
+  import {mapState} from 'vuex'
   export default {
     data(){
       return {
         popupVisible:false,
+        arrs:['1'],
         publishName:'好地方角度',
         publishDate:'19-01-05 09:48',
-        text:'好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的',
+        text:'好的东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的',
         imgs:['http://pic11.nipic.com/20101126/3367900_112731025783_2.jpg',
-              'http://5b0988e595225.cdn.sohucs.com/images/20181218/b93d89bf97ef4315b6a4d90c9ce72c3d.jpeg',
-              'http://pic25.nipic.com/20121205/391129_153756705000_2.jpg',
-              'http://wx4.sinaimg.cn/large/006DbPTnly1fx3cwfrtt6j30dw0dwtam.jpg'],
+          'http://5b0988e595225.cdn.sohucs.com/images/20181218/b93d89bf97ef4315b6a4d90c9ce72c3d.jpeg',
+          'http://pic25.nipic.com/20121205/391129_153756705000_2.jpg',
+          'http://pic25.nipic.com/20121205/391129_153756705000_2.jpg',
+          ],
         video:"../../assets/video/video.mp4",
         ticket:'免费',
         scenicSort:['1','2','3','4','5','6','7','8'],
         address:"福建省福州市闽侯县上街镇文贤路1号闽江学院",
-        arr:['1','2','3','4','5','6','7','8','1','2','3','4','5','6','7','8','1','2','3','4','5','6','7','8','1','2','3','4','5','6','7','8','1','2','3','4','5','6','7','8','1','2','3','4'],
         commentCount:27,
         commentName:'会受到广泛',
         commentDate:'19-01-05 03:58',
-        commentText:'的个数所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所的个数所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所'
+        commentText:'的个所所gdfdsff所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所'
       }
     },
-    components:{
-      scroll,
-      abc
-    },
-    mounted(){
-
-      this.$nextTick(() =>{
-        if(!this.scroll){
-          this.scroll = new BScroll(this.$refs.wrapper,{
-            click:true
-          })
-        }else{
-          this.scroll.refresh()
+    computed:{
+      isShowScenicDetail:{
+        get () {
+          return this.$store.state.isShowScenicDetail
+        },
+        set (value) {
+          this.$store.commit('change_display', value)
         }
-      })
-    },
-    computed: {
+      },
+
       scenicSortArrs () {
         const {scenicSort} = this
         //准备一个大的数组
@@ -149,6 +147,33 @@
         })
         return arr
       }
+    },
+    watch:{
+      imgs(){
+        this.$refs.wrapper.refresh()
+      }
+    },
+    components:{
+      scroll,
+      Comment,
+      Reply,
+    },
+    mounted(){
+      setTimeout(() =>{
+        this.scroll.refresh()
+      },20)
+    },
+    methods:{
+      closeWindow(){
+        this.$store.commit('change_display',false)
+      },
+      isShowComment(value){
+
+        this.$store.commit('comment_content',true)
+      },
+      openReply(){
+        this.$store.commit('change_reply',true)
+      }
     }
   }
 </script>
@@ -168,8 +193,8 @@
 
   .scenicDetail
     height 6.67rem
-    display flex
-    flex-flow column
+    /*display flex*/
+    /*flex-flow column*/
     .header
       width 3.75rem
       height 0.4rem
@@ -242,8 +267,8 @@
             .aboutAddress
               display flex
               .addressSetting
-                  margin-left 0.05rem
-                  width 2.85rem
+                margin-left 0.05rem
+                width 2.85rem
         .comment
           width 3.75rem
           font-size 0.13rem

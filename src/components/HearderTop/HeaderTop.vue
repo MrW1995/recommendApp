@@ -7,7 +7,7 @@
             <label class="select-label-2">最热</label>
             <label class="select-label-3">最近</label>
           </div>
-          <i class="iconfont icon-fabu"></i>
+          <i class="iconfont icon-fabu" @click="showPublish"></i>
         </div>
         <div class="sort">
           <SearchInput v-if="!isShowSearche"></SearchInput>
@@ -29,6 +29,11 @@
     components:{
       LeftMenu,
       SearchInput
+    },
+    methods:{
+      showPublish(){
+        this.$store.commit('change_publish',true)
+      }
     },
   }
 </script>

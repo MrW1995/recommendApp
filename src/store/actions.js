@@ -4,7 +4,6 @@ import {
 
 import {
   RECEIVE_SCENIC,
-  CHANGE_BOOLEAN
 } from './mutations-types'
 export default {
   /*异步请求的方法*/
