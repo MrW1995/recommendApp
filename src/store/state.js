@@ -14,5 +14,6 @@ export default {
   isShowPublishScenic:false,//显示发表文章
   isShowScenicComment:false,//显示发表评论
   isShowReplyComment:false,//显示回复评论
-  scenics:[]
+  isShowUserLogin:false,
+  scenics:[],
 }

@@ -14,3 +14,5 @@ export const CHANGE_PUBLISH = "change_publish"
 export const COMMENT_CONTENT = "comment_content"
 
 export const CHANGE_REPLY = "change_reply"
+
+export const CHANGE_LOGIN = "change_login"

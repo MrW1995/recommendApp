@@ -6,7 +6,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 const Scenic = () =>import('../pages/ShowScenic/ShowScenic')
 const StudySource = () =>import('../pages/StudySource/StudySource')
-const Laugh = () =>import('../pages/Share/Share')
+const Laugh = () =>import('../pages/Laugh/Laugh')
 const Personal = () =>import('../pages/Personal/Personal')
 const Search = () =>import('../pages/Search/Search')
 Vue.use(VueRouter)

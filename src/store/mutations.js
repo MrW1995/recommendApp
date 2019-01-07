@@ -7,6 +7,7 @@ import {
   CHANGE_PUBLISH,
   CHANGE_REPLY,
   COMMENT_CONTENT,
+  CHANGE_LOGIN,
 }from './mutations-types'
 export default {
   /*异步修改state的方法*/
@@ -30,6 +31,11 @@ export default {
 
   [CHANGE_REPLY](state,boolVal){
     state.isShowReplyComment = boolVal
+  },
+
+  [CHANGE_LOGIN](state,boolVal){
+    console.log("234")
+    state.isShowUserLogin = boolVal
   },
 
 
