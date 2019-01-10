@@ -17,7 +17,7 @@
         <mt-tab-container v-model="selected">
           <mt-tab-container-item id="1">
             <div class="upload">
-              <uploader url="http://cn.ynhdkc.com/admin/uploadapiv2/uploadpics">
+              <uploader url="http://cn.ynhdkc.com/admin/uploadapiv2/uploadpics" maxLength="9" isShow="0">
 
               </uploader>
               <!--<div class="btn" @click="upload">-->

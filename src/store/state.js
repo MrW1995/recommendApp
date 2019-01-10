@@ -14,6 +14,7 @@ export default {
   isShowPublishScenic:false,//显示发表文章
   isShowScenicComment:false,//显示发表评论
   isShowReplyComment:false,//显示回复评论
-  isShowUserLogin:false,
+  isShowUserLogin:false,//显示登录
+  isShowUploaderImg:false,//显示上传个人照片
   scenics:[],
 }

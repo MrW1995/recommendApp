@@ -20,17 +20,15 @@
 </template>
 
 <script>
+
   export default {
-    // props:{
-    //   popupVisible:Boolean,
-    //   default:false
-    // },
     data(){
       return{
         popupVisible:false,
         remaindCount:0,
         allCount:100,
-        inputComent:''
+        inputComent:'',
+        number:100
       }
     },
     computed:{
@@ -45,20 +43,10 @@
     },
     watch:{
       inputComent(newVal,oldVal){
-        const newValLength = newVal.length
-        const oldValLength = oldVal.length
-        if(newValLength>oldValLength){
-          this.remaindCount = newValLength
-          this.allCount = (this.allCount=100) - newValLength
-        }else{
-          this.remaindCount = newValLength
-          this.allCount = this.allCount + (oldValLength-newValLength)
-        }
-      },
-      // popupVisible(value){
-      //   if(this.popupVisible===false)
-      //     this.$emit('fatherMethod')
-      // }
+        const {remaindCount,allCoun} = this.util.countNumber(newVal,oldVal,this.allCount,this.number)
+          this.remaindCount = remaindCount
+          this.allCount = allCoun
+      }
     },
     methods:{
       closeComment(){

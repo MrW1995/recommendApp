@@ -16,3 +16,5 @@ export const COMMENT_CONTENT = "comment_content"
 export const CHANGE_REPLY = "change_reply"
 
 export const CHANGE_LOGIN = "change_login"
+
+export const CHANGE_UPLOADER = "change_uploader"

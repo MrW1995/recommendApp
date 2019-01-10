@@ -77,7 +77,6 @@
               </ul>
             </div>
           </div>
-
         </div>
       </scroll>
     </div>
@@ -91,7 +90,6 @@
   import scroll from '../../components/Sroll/Scroll'
   import Comment from '../../components/Comment/Comment'
   import Reply from '../../components/Reply/Reply'
-  import {mapState} from 'vuex'
   export default {
     data(){
       return {
@@ -112,7 +110,7 @@
         commentCount:27,
         commentName:'会受到广泛',
         commentDate:'19-01-05 03:58',
-        commentText:'的个所所gdfdsff所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所'
+        commentText:'的个所所gdfdsasff所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所'
       }
     },
     computed:{
@@ -128,24 +126,25 @@
       scenicSortArrs () {
         const {scenicSort} = this
         //准备一个大的数组
-        const arr = []
-        //准备一个小的数组
-        let minArr = []
+        // const arr = []
+        // //准备一个小的数组
+        // let minArr = []
+        //
+        // scenicSort.forEach(s =>{
+        //
+        //   //当minArr的长度为4时 就创建新的数组
+        //   if(minArr.length === 4){
+        //     minArr = []
+        //   }
+        //   //当minArr为空时 说明该数组是刚创建的  与大的数组进行关联
+        //   if(minArr.length === 0){
+        //     arr.push(minArr)
+        //   }
+        //   //每遍历一个就往里面装一个
+        //   minArr.push(s)
+        // })
 
-        scenicSort.forEach(s =>{
-
-          //当minArr的长度为4时 就创建新的数组
-          if(minArr.length === 4){
-            minArr = []
-          }
-          //当minArr为空时 说明该数组是刚创建的  与大的数组进行关联
-          if(minArr.length === 0){
-            arr.push(minArr)
-          }
-          //每遍历一个就往里面装一个
-          minArr.push(s)
-        })
-        return arr
+        return this.util.splitArr(scenicSort,4)
       }
     },
     watch:{
@@ -160,7 +159,7 @@
     },
     mounted(){
       setTimeout(() =>{
-        //this.scroll.refresh()
+        this.scroll.refresh()
       },20)
     },
     methods:{

@@ -15,9 +15,9 @@
                <span class="userAcountFont">用户名</span><input type="text" class="publishSetting userNameInput" placeholder="用户名/手机号">
             </div>
             <div class="userPwd">
-              <span class="userPwdFont">密码</span><input type="password" class="publishSetting pwdInput" v-if="!false">
-              <input type="text" class="publishSetting pwdInput" v-if="!true">
-              <!--<i :class="imgUrl1" class="showPwd"></i>-->
+              <span class="userPwdFont">密码</span><input type="password" v-model="pwd" class="publishSetting pwdInput" placeholder="请输入密码" v-if="!isShowPwd">
+              <input type="text" placeholder="请输入密码" v-model="pwd" class="publishSetting pwdInput" v-else>
+              <i :class="isShowPwd?'iconfont icon-xianshi':'iconfont icon-guanbixianshi'" class="showPwd" @click="isShowPwd = !isShowPwd"></i>
             </div>
             <div class="validate">
               <span class="validateFont">验证码</span><input type="text" class="publishSetting validateInput">
@@ -34,7 +34,17 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
           <div class="upload">
-
+            <div class="phoneLogin">
+              <div class="phoneNumber">
+                <input type="text" placeholder="请输入正确的手机号" class="phoneInput" v-model="inputNumber">
+                <div class="sendMessage" v-if="isShowSendNumber">
+                  <span class="getValidate" >获取验证码</span>
+                </div>
+              </div>
+              <div class="phoneValidate">
+                <input type="text" placeholder="请输入验证码" class="validateNumber">
+              </div>
+            </div>
           </div>
         </mt-tab-container-item>
       </mt-tab-container>
@@ -44,19 +54,23 @@
 
 <script>
   import {mapState} from 'vuex'
+  import {MessageBox } from 'mint-ui'
   export default {
     data(){
       return {
+        pwd:'',
+        isShowPwd:false,
         selected:'1',
         imgUrl1:'iconfont icon-xianshi',
-        imgUrl2:'iconfont icon-buxianshi'
-
+        imgUrl2:'iconfont icon-guanbixianshi',
+        isShowSendNumber:false,
+        inputNumber:'',
       }
     },
     computed:{
         isShowUserLogin:{
           get(){
-            console.log(this.$store.state.isShowUserLogin)
+
             return this.$store.state.isShowUserLogin
           },
           set(value){
@@ -65,13 +79,30 @@
         }
 
     },
+    watch:{
+      inputNumber(){
+        const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+        console.log("123")
+        if(reg.test(this.inputNumber)) {
+          console.log("123456")
+          this.isShowSendNumber = true
+        }else if(this.inputNumber.length >= 11){
+          this.isShowSendNumber = false
+          let instance = MessageBox('提示','请输入正确的手机号码')
+        }else{
+          this.isShowSendNumber = false
+        }
+      }
+
+    },
     methods:{
       login(){
         console.log("123")
       },
       closeLogin(){
         this.$store.commit('change_login',false)
-      }
+      },
+
     }
   }
 </script>
@@ -114,7 +145,9 @@
       .pwdInput
         margin-left 0.19rem
       .showPwd
-        float left
+        position: absolute;
+        left 2.40rem
+        top 0.75rem
         color #3366FF
     .validate
       display flex
@@ -152,4 +185,34 @@
         .cancelFont
           color #F8F8F8
           margin auto
+    .upload
+      width 3.75rem
+      .phoneLogin
+        margin 0.1rem 0 0 0
+        display flex
+        flex-flow column
+        .phoneNumber
+          margin 0
+          .phoneInput
+            width 3.75rem
+            height 0.3rem
+            border none
+          .sendMessage
+            position absolute
+            top 0.11rem
+            left 2.188rem
+            width 0.8rem
+            background-color #3366FF
+            height 0.3rem
+            display flex
+            .getValidate
+                margin auto
+                color #F8F8F8
+                font-size 0.15rem
+       .phoneValidate
+          margin-top 0.1rem
+          .validateNumber
+            border none
+            width 3.75rem
+            height 0.3rem
 </style>

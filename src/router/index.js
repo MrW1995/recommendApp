@@ -9,6 +9,7 @@ const StudySource = () =>import('../pages/StudySource/StudySource')
 const Laugh = () =>import('../pages/Laugh/Laugh')
 const Personal = () =>import('../pages/Personal/Personal')
 const Search = () =>import('../pages/Search/Search')
+const PersonalEdit = () =>import('../pages/PersonalEdit/PersonalEdit')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -39,7 +40,11 @@ export default new VueRouter({
       component:Personal,
       meta:{
         isShowFooter:true
-      }
+      },
+    },
+    {
+      path:'/personaledit',
+      component:PersonalEdit
     },
     {
       path:'/search',

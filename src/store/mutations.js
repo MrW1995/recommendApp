@@ -8,6 +8,7 @@ import {
   CHANGE_REPLY,
   COMMENT_CONTENT,
   CHANGE_LOGIN,
+  CHANGE_UPLOADER,
 }from './mutations-types'
 export default {
   /*异步修改state的方法*/
@@ -34,8 +35,11 @@ export default {
   },
 
   [CHANGE_LOGIN](state,boolVal){
-    console.log("234")
     state.isShowUserLogin = boolVal
+  },
+
+  [CHANGE_UPLOADER](state,boolVal){
+    state.isShowUploaderImg = boolVal
   },
 
 

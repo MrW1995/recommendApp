@@ -36,7 +36,7 @@
         </div>
         <div class="userOperate">
             <div class="aboutUserOperate">
-              <div class="dataEdit" :class="{changeDataEdit:changeCss1}"  @touchstart="changeCSS(true,'data')" @touchend="changeCSS(false,'data')">
+              <div class="dataEdit" @click="$router.push('/personaledit')" :class="{changeDataEdit:changeCss1}"  @touchstart="changeCSS(true,'data')" @touchend="changeCSS(false,'data')">
                   <div class="move">
                     <i class="iconfont icon-ziliao"></i>
                     资料编辑
@@ -60,6 +60,7 @@
           <span class="back">退出</span>
       </div>
       <Login></Login>
+
     </div>
 </template>
 
@@ -79,12 +80,12 @@
       }
     },
     components:{
-      Login
+      Login,
     },
     methods:{
       Login(){
         this.$store.commit('change_login',true)
-        console.log("123")
+
       },
       LoginOut(){
         console.log("LoginOut")
