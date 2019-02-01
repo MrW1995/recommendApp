@@ -8,7 +8,7 @@
             <span class="commentDate">2019-01-10</span>
           </div>
           <div class="commentBody">
-            <span class="commentContent">{{commentContent}}</span>
+            <span class="commentContent" @click="showUserComment">{{commentContent}}</span>
             <span class="userReply">回复</span>
           </div>
         </li>
@@ -21,6 +21,11 @@
     data(){
       return{
         commentContent:'好地方更好的三个号发的是尽快发货的结合的苏菲不穿校服V型参加现场'
+      }
+    },
+    methods:{
+      showUserComment(){
+        this.$store.commit('change_comment',true)
       }
     }
   }

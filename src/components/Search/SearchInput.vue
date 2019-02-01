@@ -1,14 +1,18 @@
 <template>
-  <div class="search-input">
-    <mt-button class="button-move" @click="$router.push('/search')">
-      <img src="../../assets/imgs/search.png" class="mt-button-img" slot="icon">
-       查询
-    </mt-button>
+  <div>
+    <div class="search-input">
+      <mt-button class="button-move" @click="$router.push('/search')">
+        <img src="../../assets/imgs/search.png" class="mt-button-img" slot="icon">
+         查询
+      </mt-button>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {}
+  export default {
+
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

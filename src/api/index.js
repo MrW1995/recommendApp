@@ -4,4 +4,4 @@
 
 import ajax from './ajax'
 
-export const recevieScenics = () =>ajax("/querySenics")
+export const recevieScenics = (searchSort) =>ajax("/querySenics/"+searchSort)

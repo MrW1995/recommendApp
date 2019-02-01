@@ -20,6 +20,7 @@ export default function ajax (url, data={}, type='GET') {
         url = url + '?' + dataStr
       }
       // 发送get请求
+      console.log(url)
       promise = axios.get(url)
     } else {
       // 发送post请求

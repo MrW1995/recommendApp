@@ -2,11 +2,6 @@
   <div class="NavSlide">
     <nav>
       <p v-for="(item,$index) in arr" @click="toggle($index,item)"><router-link to="/" :class="{active:$index==active}">{{item}}</router-link></p>
-      <!--<p class="fixadd">-->
-        <!--<router-link to="/Select" >-->
-          <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>-->
-        <!--</router-link>-->
-      <!--</p>-->
     </nav>
   </div>
 </template>

@@ -1,16 +1,20 @@
 <template>
       <div>
-        <scroll class="wrapper" ref="listContent" :data="scenics" :pulldown="pulldown" @pullingDown="loadData">
+
+        <scroll class="wrapper" ref="listContent" :listenScroll="true" :pullup="true" :data="scenics" :pulldown="true">
           <ul>
+            <div class="pullUp" v-if="pullUpLoading"></div>
               <li class="li-wrapper" v-for="(item,index) in scenics" :key="index">
                 <div class="top-box">
-                  <div class="left-box" :class="{noImg:item.img ===''}">
-                    <span class="li-title" :class="{contentMany:item.recomment.length>44}" @click="showScenicDetail">{{item.recomment}}</span>
+
+                  <div class="left-box" :class="{noImg:item.img ===''}" @click="$router.push('/scenicDetail')">
+                    <span class="li-title" :class="{contentMany:item.recomment.length>44}">{{item.recomment}}</span>
                   </div>
 
                   <div class="right-img" v-if="item.recomment.length<=44">
                     <img class="li-picture" :src="item.img">
                   </div>
+
                 </div>
 
                 <div class="midden-box-img" v-if="item.recomment.length>44 && item.img !=='' ">
@@ -31,41 +35,37 @@
                   <span class="publish-date">{{getDateTiem(item.date)}}</span>
                 </div>
               </li>
+            <div class="pullDown" v-if="pullDownLoading"></div>
           </ul>
         </scroll>
-        <ScenicDetail class="scenicDetail"></ScenicDetail>
         <PublishScenic class="publishScenic"></PublishScenic>
       </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
-  import ScenicDetail from '../ScenicDetail/ScenicDetail'
   import scroll from '../../components/Sroll/Scroll'
   import PublishScenic from '../PublishScenic/PublishScenic'
   export default {
-    data(){
-      return {
-        scrollY:0,
-        pulldown:true
-      }
-    },
+
     computed:{
-        ...mapState(['scenics'])
+        ...mapState(['scenics','pullUpLoading','pullDownLoading']),
+
     },
     components:{
       scroll,
-      ScenicDetail,
       PublishScenic
     },
     watch:{
-       scrollY(){
-         if(this.scrollY >= 150){
-           this.$store.state.isShowSearche = true
-         }else{
-           this.$store.state.isShowSearche = false
-         }
-       }
+      pullUpLoading(value){
+        if(value)
+          this.$store.dispatch('receiveAb')
+      },
+      pullDownLoading(value){
+        if(value)
+          this.$store.dispatch('receiveAb')
+      }
+
     },
     mounted() {
       this.$store.dispatch('receiveAb')
@@ -73,19 +73,9 @@
         if(!this.scroll){
 
         }else {
-          this.$refs.listContent.refresh()
+          this.$refs.listContent.$emit('refresh')
         }
-
       },20)
-      // this.$refs.listContent.on('scroll',({x,y}) =>{
-      //   this.scrollY = Math.abs(y)
-      //   console.log(this.scrollY)
-      // })
-
-      //   this.scroll.on('scroll',({x,y}) =>{
-      //    this.scrollY = Math.abs(y)
-      //   })
-      // })
     },
     methods:{
       getDateTiem(date){
@@ -110,26 +100,20 @@
             return date
         }
       },
-      loadData(){
-          console.log("123")
-      },
-      showScenicDetail(){
-        this.$store.commit('change_display',true)
-      }
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  ul,li //除去ul li 的一些默认配置
-    -webkit-margin-before: 0em
-    -webkit-margin-after: 0em
-    -webkit-margin-start: 0px
-    -webkit-margin-end: 0px
-    -webkit-padding-start: 0px
-    text-align:left
-    list-style: none
-    font-size:0.15rem
+  @import "../../common/stylus/mixins.styl"
+  ul,li
+    ulAndLi()
+  .pullUp
+    settingLoadingPic()
+    background-image: url("../../assets/imgs/loading_1.gif");
+  .pullDown
+    settingLoadingPic()
+    background-image: url("../../assets/imgs/loading_2.gif");
   .wrapper
     width: 3.75rem
     position:absolute
@@ -137,7 +121,7 @@
     bottom: 0.57rem
     overflow: hidden
     z-index: 1
-    background-color: darkgray
+    background-color: white
     .li-wrapper
       display:flex
       flex-flow: column

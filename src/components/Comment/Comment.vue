@@ -1,22 +1,19 @@
 <template>
-  <mt-popup class="mtPopup"
-            v-model="isShowScenicComment"
-            position="bottom"
-            :modal="false"
-            popup-transition="popup-fade">
+  <div class="comment" v-if="isShowComment">
 
     <div class="mtheader">
-      <i class="iconfont icon-guanbi" @click="closeComment"></i>
+      <span class="cancel"  @touchstart="changeColor(1)" @touchend="changeColor(2)" @click="showComment(false)">取消评论</span>
+      <!--<i class="iconfont icon-guanbi"></i>-->
     </div>
 
-    <textarea class="textareInput" placeholder="请填写你的评论" v-model="inputComent">
+    <textarea class="textareInput" placeholder="请填写你的评论" v-model="inputComent" maxlength="100">
 
     </textarea>
     <span class="statisticsCount" >{{remaindCount}}/{{allCount}}</span>
 
-    <mt-button class="mtbuttonclear" type="danger"><span class="mtpublic">清除</span></mt-button>
-    <mt-button  class="mtbuttonpublish" type="primary"><span class="mtpublic">评论</span></mt-button>
-  </mt-popup>
+    <button class="mtbuttonclear" type="danger"><span class="mtpublic">清除</span></button>
+    <button class="mtbuttonpublish" type="primary"><span class="mtpublic">评论</span></button>
+  </div>
 </template>
 
 <script>
@@ -28,18 +25,12 @@
         remaindCount:0,
         allCount:100,
         inputComent:'',
-        number:100
+        number:100,
+        isShowComment:false
       }
     },
     computed:{
-      isShowScenicComment:{
-        get(){
-          return this.$store.state.isShowScenicComment
-        },
-        set(value){
-          this.$store.commit('comment_content',value)
-        }
-      }
+
     },
     watch:{
       inputComent(newVal,oldVal){
@@ -49,48 +40,54 @@
       }
     },
     methods:{
-      closeComment(){
-        this.$store.commit('comment_content',false)
-      }
+      showComment(value){
+        this.$emit('changeState')
+        this.isShowComment = value
+      },
+      changeColor(value){
 
+      }
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .mtPopup
-    width 3.75rem
+  @import "../../common/stylus/mixins.styl"
+  .comment
+    width 3.5rem
     height 3rem
+    position fixed
+    bottom: 0
+    margin 0 0 0 0.125rem
+    background-color white
+    border 1px solid gainsboro
     .mtheader
-      width 3.75rem
+      width 3.5rem
       height 0.3rem
       background-color #D3D3D3
-      .icon-guanbi
-        font-size 0.2rem
+      .cancel
+        font-size 0.16rem
         float left
+        margin 0.045rem 0 auto 0.1rem
         color white
-        margin 0.04rem 0 0 0.14rem
     .textareInput
-      margin 0.1rem 0 0 0.225rem
       width 3.3rem
       height 1.5rem
+      display flex
+      margin 0.1rem auto 0 auto
     .statisticsCount
-      float left
-      display inline
-      margin -0.2rem 0 0 3.1rem
-      font-size 0.11rem
-      z-index 111
+      settingStatisticsCount()
+      margin -0.26rem 0 0 3.05rem
     .mtbuttonpublish
-      width 0.6rem
-      float left
-      margin 0rem 0 0 0.2rem
+      settingBtn()
+      margin-left 0.1rem
       .mtpublic
         width 0.32rem
         font-size 0.16rem
     .mtbuttonclear
-      width 0.6rem
-      float left
-      margin 0rem 0 0 2rem
+      settingBtn()
+      background-color red
+      margin-left 1.9rem
       .mtpublic
         width 0.32rem
         font-size 0.16rem

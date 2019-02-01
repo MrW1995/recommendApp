@@ -4,20 +4,23 @@
         <i class="iconfont icon-guanbi"></i>
         <span class="replyTitle">详细评论</span>
       </div>
-      <div class="replyContent">
-        <div class="replySetting">
-          <img src="http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg" alt="" class="replyImg">
-          <div class="replyUserNameAndDate">
-            <span class="replyDate">2019-01-10</span>
-            <span class="replyUserName">好的福建省</span>
-          </div>
-        </div>
-        <div class="commentDetail">
-          <span class="commentContent">{{commentContent}}</span>
-        </div>
-      </div>
+
       <div class="otherUserComment">
         <Scroll class="wrapper" ref="wrapper" :data="arr">
+          <div>
+          <div class="replyContent">
+            <div class="replySetting">
+              <img src="http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg" alt="" class="replyImg">
+              <div class="replyUserNameAndDate">
+                <span class="replyDate">2019-01-10</span>
+                <span class="replyUserName">好的福建省</span>
+              </div>
+            </div>
+            <div class="commentDetail">
+              <span class="commentContent">{{commentContent}}</span>
+            </div>
+          </div>
+
           <ul>
             <li v-for="(item,index) in arr" :key="index">
               <div class="replyInfo">
@@ -34,6 +37,7 @@
               </div>
             </li>
           </ul>
+          </div>
         </Scroll>
       </div>
     </div>
@@ -44,7 +48,7 @@
   export default {
     data(){
       return{
-        commentContent:"好的工会发的是的福建省地方或是的工的福建省地方或是工的福建省地方或是工的福建省地方或是的工的福建省地方或是的工的福建省地方或是的工会发的是的福建省地方的工会发的是的福建省地方的工会发的是的福建省地方更好的双方各发山东省的方式更好多个",
+        commentContent:"好的工的福建地方是工的福建省地方或是工的福建省地方或是的工的福建省地方或是的工的福建省地方或是的工会发的是的福建省地方的工会发的是的福建省地方的工会发的是的福建省地方更好的双方各发山东省的方式更好多个",
         replyUserContent:"好的工会发的是的福建省地方或是的工的福建省地方或是工的福建省地方或是工的福建省地方或是的工的福建省地方或是的工的福建省地方或是的工会发的是的福建省地方的工会发的是的福建省地方的工会发的是的福建省地方更好的双方各发山东省的方式更好多个",
         arr:['1','2','3','4']
       }
@@ -69,6 +73,8 @@ ul,li
 
 .publicReply
   display flex
+  height 6.67rem
+
   flex-flow column
   .publicReplyHeader
     width 3.75rem
@@ -82,40 +88,40 @@ ul,li
     .replyTitle
       margin  auto 0 auto 1.1rem
       font-weight bold
-  .replyContent
-    width 3.75rem
-    display flex
-    flex-flow column
-    border-bottom 1px solid gainsboro
-    .replySetting
-      display flex
-      .replyImg
-        width 0.35rem
-        height 0.35rem
-        margin  0.1rem 0 0 0.1rem
-      .replyUserNameAndDate
-        font-size 0.13rem
-        display flex
-        flex-flow column
-        margin 0.1rem 0 0 0.05rem
-        .replyDate
-          font-size 0.05rem
-          margin-bottom 0.01rem
-        .replyUserName
-          margin 0 0 0 0
-    .commentDetail
-      display flex
-      font-size 0.15rem
-      margin 0.05rem 0 0 0.3rem
-      .commentContent
-        width 3.2rem
-        margin-bottom 0.05rem
   .otherUserComment
     width 3.75rem
     border-bottom 1px solid gainsboro
     .wrapper
-      height 6rem
+      height 6.37rem
       overflow hidden
+      .replyContent
+        width 3.75rem
+        display flex
+        flex-flow column
+        border-bottom 1px solid gainsboro
+        .replySetting
+          display flex
+          .replyImg
+            width 0.35rem
+            height 0.35rem
+            margin  0.1rem 0 0 0.1rem
+          .replyUserNameAndDate
+            font-size 0.13rem
+            display flex
+            flex-flow column
+            margin 0.1rem 0 0 0.05rem
+            .replyDate
+              font-size 0.05rem
+              margin-bottom 0.01rem
+            .replyUserName
+              margin 0 0 0 0
+        .commentDetail
+          display flex
+          font-size 0.15rem
+          margin 0.05rem 0 0 0.3rem
+          .commentContent
+            width 3.2rem
+            margin-bottom 0.05rem
       .replyInfo
         display flex
         flex-flow column

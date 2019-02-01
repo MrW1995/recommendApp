@@ -8,7 +8,8 @@ const Scenic = () =>import('../pages/ShowScenic/ShowScenic')
 const StudySource = () =>import('../pages/StudySource/StudySource')
 const Laugh = () =>import('../pages/Laugh/Laugh')
 const Personal = () =>import('../pages/Personal/Personal')
-const Search = () =>import('../pages/Search/Search')
+const Search = () =>import('../pages/SearchPage/Search')
+const ScenicDetail = () =>import('../pages/scenicDetail/scenicDetail')
 const PersonalEdit = () =>import('../pages/PersonalEdit/PersonalEdit')
 Vue.use(VueRouter)
 
@@ -35,6 +36,20 @@ export default new VueRouter({
         isShowFooter:true
       }
     },
+    { //搜索页
+      path:'/search',
+      component:Search,
+      meta:{
+        isShowFooter:false
+      }
+    },
+    { //景点详情页
+      path:'/scenicDetail',
+      component:ScenicDetail,
+      meta:{
+        isShowFooter:false
+      }
+    },
     {
       path:'/personal',
       component:Personal,
@@ -45,10 +60,6 @@ export default new VueRouter({
     {
       path:'/personaledit',
       component:PersonalEdit
-    },
-    {
-      path:'/search',
-      component:Search
     },
     {
       path:'/',

@@ -1,6 +1,7 @@
 <template>
   <div ref="wrapper">
     <slot></slot>
+
   </div>
 </template>
 
@@ -11,7 +12,7 @@
     props: {
       probeType: {
         type: Number,
-        default: 2
+        default: 3
       },
       click: {
         type: Boolean,
@@ -40,6 +41,16 @@
       refreshDelay: {
         type: Number,
         default: 20
+      },
+      pullingDown:{
+        type:Boolean,
+        default: true
+      }
+    },
+    data(){
+      return{
+        scrolly:0,
+        flag:false
       }
     },
     mounted() {
@@ -54,20 +65,37 @@
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
-          click: this.click
+          click: this.click,
         })
 
         if (this.listenScroll) {
+
           let me = this
           this.scroll.on('scroll', (pos) => {
+            this.scrolly = Math.abs(pos.y)
             me.$emit('scroll', pos)
           })
         }
 
-        if (this.pullup) {
+        if (this.pulldown) {
           //监听即将滚动到底部，监听此事件即可
           this.scroll.on('scrollEnd', () => {
             if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              console.log("123")
+              this.$store.commit('change_downloading',true)
+              this.scroll.destroy()
+              this.$emit('scrollToEnd')
+            }
+          })
+        }
+
+        if (this.pullup) {
+
+          //监听即将滚动顶部，监听此事件即可
+          this.scroll.on('scrollEnd', () => {
+            if (Math.abs(this.scroll.y) <= (this.scroll.minScrollY)) {
+              this.$store.commit('change_uploading',true)
+              this.scroll.destroy()
               this.$emit('scrollToEnd')
             }
           })
@@ -78,8 +106,14 @@
           })
         }
       },
+
       disable() {
         this.scroll && this.scroll.disable()
+      },
+      show(){
+          // this.scroll.on('scroll',() =>{
+          //   console.log(123)
+          // })
       },
       enable() {
         this.scroll && this.scroll.enable()
@@ -99,8 +133,20 @@
         setTimeout(() => {
           this.refresh()
         }, this.refreshDelay)
+      },
+      scrolly(value) {
+
+        if (value / 2 < 25) {
+
+          this.$store.commit('change_showstate', false)
+        }
+
+        else{
+
+          this.$store.commit('change_showstate',true)
+        }
       }
-    }
+    },
   }
 </script>
 

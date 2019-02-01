@@ -5,13 +5,15 @@
     </div>
     <div class="content">
       <div>
-        <textarea class="publishContent">
+        <textarea class="publishContent" v-model="inputScenicContent" maxlength="100">
         </textarea>
+        <span class="inputScenicContext" >{{remaindCount}}/{{allCount}}</span>
       </div>
+
       <div class="uploadPictureAndVideo">
         <mt-navbar v-model="selected">
           <mt-tab-item id="1" >添加图片</mt-tab-item>
-          <mt-tab-item id="2">添加视频</mt-tab-item>
+
         </mt-navbar>
 
         <mt-tab-container v-model="selected">
@@ -20,14 +22,6 @@
               <uploader url="http://cn.ynhdkc.com/admin/uploadapiv2/uploadpics" maxLength="9" isShow="0">
 
               </uploader>
-              <!--<div class="btn" @click="upload">-->
-                <!--上传-->
-              <!--</div>-->
-            </div>
-          </mt-tab-container-item>
-          <mt-tab-container-item id="2">
-            <div class="upload">
-
             </div>
           </mt-tab-container-item>
         </mt-tab-container>
@@ -47,6 +41,10 @@
       return {
         selected:'1',
         imgs: [],
+        remaindCount:0,
+        allCount:100,
+        inputScenicContent:'',
+        number:100
       }
     },
     computed:{
@@ -68,6 +66,11 @@
         if (this.imgStatus === 'finished') {
           this.submit()
         }
+      },
+      inputScenicContent(newVal,oldVal){
+        const {remaindCount,allCoun} = this.util.countNumber(newVal,oldVal,this.allCount,this.number)
+        this.remaindCount = remaindCount
+        this.allCount = allCoun
       }
     },
     methods:{
@@ -109,6 +112,11 @@
       margin 0.1rem 0 0 0.207rem
       width 3.3rem
       height 1.5rem
+    .inputScenicContext
+      position absolute
+      margin -0.5rem 0 0 3.1rem
+      font-size 0.11rem
+
     .uploadPictureAndVideo
       width 3.3rem
       border 1px solid blue

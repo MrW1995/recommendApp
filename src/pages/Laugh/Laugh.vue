@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <PublicReply></PublicReply>
-  </div>
+  <div id="allmap"></div>
 </template>
 
 <script>
-  import PublicReply from '../../components/PublicReply/PublicReply'
   export default {
-    components:{
-      PublicReply
+    mounted(){
+
+    },
+    methods:{
+
     }
   }
 </script>
-
-<style scoped lang="stylus" rel="stylesheet/stylus">
+npm
+<style>
 
 </style>
-

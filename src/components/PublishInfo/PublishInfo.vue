@@ -42,11 +42,18 @@
       }
     },
     mounted(){
-      this.$refs.wrapper.refresh()
+      setTimeout(() =>{
+        this.$refs.wrapper.refresh()
+      },20)
     },
     components:{
       CommentList,
       Scroll,
+    },
+    methods:{
+      showUserComment(){
+        this.$store.commit('change_comment',true)
+      }
     }
   }
 </script>

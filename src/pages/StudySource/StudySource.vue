@@ -8,7 +8,7 @@
         <ul>
           <li v-for="item in arr">
             <div class="individualSourceInfo">
-              <span class="individualSourceInfoContext">{{SourceInfoContext}}</span>
+              <span class="individualSourceInfoContext" @click="showDetail">{{SourceInfoContext}}</span>
               <table class="foreachImg">
                 <tr v-for="(SourceImg,index) in SourcesImg" :key="index">
                   <td v-for="(img,index) in SourceImg" :key="index">
@@ -25,12 +25,14 @@
         </ul>
       </Scroll>
     </div>
+    <SourcesDetail></SourcesDetail>
   </div>
 </template>
 
 <script>
   import Scroll from '../../components/Sroll/Scroll'
   import publishUserName from '../../components/PublishInfo/PublishUserName'
+  import SourcesDetail from '../../components/SourcesDetail/SourcesDetail'
   export default {
     data(){
       return {
@@ -58,8 +60,14 @@
     },
     components:{
       Scroll,
-      publishUserName
+      publishUserName,
+      SourcesDetail
 
+    },
+    methods:{
+      showDetail(){
+        this.$store.commit('change_sources',true)
+      }
     }
   }
 </script>

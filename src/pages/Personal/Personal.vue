@@ -5,7 +5,7 @@
         </div>
         <div class="userLoginAndInfo">
           <div class="userlogin">
-            <img src="http://img2.imgtn.bdimg.com/it/u=1813275965,321881607&fm=26&gp=0.jpg" class="userImg">
+            <img @click="openPersonalInfo" src="http://img2.imgtn.bdimg.com/it/u=1813275965,321881607&fm=26&gp=0.jpg" class="userImg">
             <div class="userNotLogin" v-if="!false">
                 <span class="immediatelyLogin" @click="Login">立即登录</span>
                 <span class="alertTest">获取更多的操作</span>
@@ -60,12 +60,13 @@
           <span class="back">退出</span>
       </div>
       <Login></Login>
-
+      <PersonalInfo></PersonalInfo>
     </div>
 </template>
 
 <script>
   import Login from '../../components/Login/Login'
+  import PersonalInfo from '../../components/PersonalInfo/PersonalInfo'
   export default {
     data(){
       return {
@@ -81,6 +82,7 @@
     },
     components:{
       Login,
+      PersonalInfo,
     },
     methods:{
       Login(){
@@ -99,6 +101,9 @@
           this.changeCss3 = value
         else
           this.changeCss4 = value
+      },
+      openPersonalInfo(){
+        this.$store.commit('change_personal',true)
       }
     }
   }
@@ -117,7 +122,7 @@
       font-weight bold
       background-color #3366FF
       .login
-        margin  auto
+        margin 0.05rem 0 0 1.6rem
     .userLoginAndInfo
       width 3.75rem
       font-size 0.21rem

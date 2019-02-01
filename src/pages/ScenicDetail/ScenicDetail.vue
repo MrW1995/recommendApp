@@ -1,12 +1,13 @@
 <template>
-  <mt-popup class="scenicDetail"  v-model="isShowScenicDetail" position="bottom">
+  <div class="scenicDetail">
+
     <div class="header">
-      <i class="iconfont icon-fanhui1" @click="closeWindow"></i>
+      <i class="iconfont icon-fanhui1" @click="$router.back()"></i>
       <span class="scenicTitle">详情</span>
     </div>
 
     <div class="contentbody">
-      <scroll :data="arrs" ref="wrapper" class="wrapper" >
+      <scroll :data="arrs" ref="wrapper" class="wrapper" :pulldown="true">
         <div>
           <div class="scenicText">
             <div class="publishInfo">
@@ -24,7 +25,7 @@
             <div class="scenicImg">
               <ul>
                 <li v-for="(item,index) in imgs" :key="index" v-if="!false">
-                  <img :src="item" alt="" class="pictureSetting">
+                  <img :src="item" alt="" class="pictureSetting"  @click="showImg(item)">
                 </li>
               </ul>
             </div>
@@ -52,13 +53,13 @@
                 <span class="address">地址: </span>
                 <span class="addressSetting">{{address}}</span>
               </div>
-
             </div>
+
           </div>
           <div class="comment">
             <div class="comentHeader">
               <span class="commentCount">{{commentCount}} 评论</span>
-              <span class="commentOfUser" @click="isShowComment(true)">评论</span>
+              <span class="commentOfUser" @click="ShowComment(true)">评论</span>
             </div>
             <div class="commentContent">
               <ul>
@@ -69,8 +70,8 @@
                     <span class="commentDate">{{commentDate}}</span>
                   </div>
                   <div class="commentTextBox">
-                      <span class="commentText" @click="openReply">{{commentText}}--{{i}}
-                        <span class="ReplyComment">回复</span>
+                      <span class="commentText" @click="openReply">{{commentText}}
+                        <span class="ReplyComment">评论</span>
                       </span>
                   </div>
                 </li>
@@ -80,16 +81,18 @@
         </div>
       </scroll>
     </div>
-
-    <Comment></Comment>
+    <div class="shade" v-if="isShade" @click="closeShade(false)"></div>
+    <ShowImg :img="img" ref="showImg"></ShowImg>
+    <Comment ref="comment" v-on:changeState="changeState()"></Comment>
     <Reply></Reply>
-  </mt-popup>
+  </div>
 </template>
 
 <script>
   import scroll from '../../components/Sroll/Scroll'
   import Comment from '../../components/Comment/Comment'
   import Reply from '../../components/Reply/Reply'
+  import ShowImg from '../../components/ShowImg/ShowImg'
   export default {
     data(){
       return {
@@ -110,65 +113,46 @@
         commentCount:27,
         commentName:'会受到广泛',
         commentDate:'19-01-05 03:58',
-        commentText:'的个所所gdfdsasff所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所'
+        commentText:'的个所所gdfdsasff所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所',
+        img:'',
+        isShade:false,
       }
     },
     computed:{
-      isShowScenicDetail:{
-        get () {
-          return this.$store.state.isShowScenicDetail
-        },
-        set (value) {
-          this.$store.commit('change_display', value)
-        }
-      },
-
       scenicSortArrs () {
         const {scenicSort} = this
-        //准备一个大的数组
-        // const arr = []
-        // //准备一个小的数组
-        // let minArr = []
-        //
-        // scenicSort.forEach(s =>{
-        //
-        //   //当minArr的长度为4时 就创建新的数组
-        //   if(minArr.length === 4){
-        //     minArr = []
-        //   }
-        //   //当minArr为空时 说明该数组是刚创建的  与大的数组进行关联
-        //   if(minArr.length === 0){
-        //     arr.push(minArr)
-        //   }
-        //   //每遍历一个就往里面装一个
-        //   minArr.push(s)
-        // })
-
         return this.util.splitArr(scenicSort,4)
       }
     },
     watch:{
-      imgs(){
-        this.$refs.wrapper.refresh()
-      }
+
     },
     components:{
       scroll,
       Comment,
       Reply,
+      ShowImg,
     },
     mounted(){
-      setTimeout(() =>{
-        this.scroll.refresh()
-      },20)
+
     },
     methods:{
-      closeWindow(){
-        this.$store.commit('change_display',false)
+      ShowComment(value){
+        this.$refs.comment.showComment(value)
+        this.isShade = true
       },
-      isShowComment(value){
-
-        this.$store.commit('comment_content',true)
+      showImg(value){
+        this.img = value
+        this.$refs.showImg.showImg(true)
+        this.isShade = true
+      },
+      closeShade(value){
+        this.$refs.comment.showComment(value)
+        this.$refs.showImg.showImg(value)
+        this.isShade = false
+      },
+      changeState(){
+        this.isShade = false
       },
       openReply(){
         this.$store.commit('change_reply',true)
@@ -179,21 +163,17 @@
 
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-
-  ul,li //除去ul li 的一些默认配置
-    -webkit-margin-before: 0em
-    -webkit-margin-after: 0em
-    -webkit-margin-start: 0px
-    -webkit-margin-end: 0px
-    -webkit-padding-start: 0px
-    text-align:left
-    list-style: none
-    font-size:0.15rem
-
-  .scenicDetail
+  @import "../../common/stylus/mixins.styl"
+  ul,li
+    ulAndLi()
+  .shade
+    width 3.75rem
     height 6.67rem
-    /*display flex*/
-    /*flex-flow column*/
+    background-color grey
+    position absolute
+    opacity 0.5
+  .scenicDetail
+    height 6.5rem
     .header
       width 3.75rem
       height 0.4rem
