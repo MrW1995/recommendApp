@@ -1,32 +1,28 @@
 <template>
   <div class="NavSlide">
     <nav>
-      <p v-for="(item,$index) in arr" @click="toggle($index,item)"><router-link to="/" :class="{active:$index==active}">{{item}}</router-link></p>
+      <p v-for="(item,$index) in arr" @click="toggle($index,item)"><router-link to="" :class="{active:$index==active}">{{item}}</router-link></p>
     </nav>
   </div>
 </template>
 
 <script>
   export default {
-    data:function(){
+    props:{
+      arr:Array,
+      url:String,
+      SortVal:String
+    },
+    data(){
       return {
         active:0,
-        arr:[
-          "所有",
-          "公园",
-          "风景区",
-          "游乐园",
-          "动物园",
-          "植物园",
-          "博物馆",
-          "水族馆",
-          "名胜古迹",
-        ]
       }
     },
     methods:{
       toggle(index,item){
         this.active=index
+        this.$emit('sendVal',item)
+        console.log(this.url +" : "+this.SortVal)
         console.log(index,item)
       }
     }

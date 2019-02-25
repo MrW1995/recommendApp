@@ -1,7 +1,7 @@
 <template>
-  <div class="publish" v-if="isShowPublishScenic">
+  <div class="publish" v-if="isShowPublishSource">
     <div class="header">
-      <i class="iconfont icon-fanhui1" @click="showPublishScenic(false)"></i>
+      <i class="iconfont icon-fanhui1" @click="openPublishSource(false)"></i>
     </div>
     <div class="content">
       <div>
@@ -26,13 +26,17 @@
           </mt-tab-container-item>
         </mt-tab-container>
       </div>
+      <div class="addSourcesUrl">
+        <span class="inputName">URL:</span>
+        <input type="text" class="inputUrl" placeholder="请输入正确的url地址">
+      </div>
       <div class="addtag">
         <div class="chooseSort">
           <span class="sort">类别:</span>
           <table class="alreadyChoose">
             <tr v-for="(scenicSortArr,index) in alreadyChooseSorts" :key="index" >
               <td v-for="(scenic,index) in scenicSortArr" :key="index">
-               公园
+                公园
               </td>
             </tr>
           </table>
@@ -49,7 +53,7 @@
       </div>
       <div class="publishBtn">
         <button class="cancel"  @click="showPublishScenic(false)">取消</button>
-        <button class="publish">发布</button>
+        <button class="publish" @click="commitPublish()">发布</button>
       </div>
     </div>
 
@@ -61,7 +65,7 @@
   export default {
     data(){
       return {
-        isShowPublishScenic:false,
+        isShowPublishSource:false,
         selected:'1',
         imgs: [],
         remaindCount:0,
@@ -114,7 +118,12 @@
       },
       chooseSorts(value){
         console.log(value)
-        console.log("123")
+      },
+      openPublishSource(value){
+        this.isShowPublishSource = value
+      },
+      commitPublish(){
+
       }
     }
 
@@ -152,13 +161,28 @@
     .uploadPictureAndVideo
       width 3.3rem
       border 1px solid blue
-      margin 0rem 0 0 0.207rem
+      margin 0 0 0 0.207rem
+    .addSourcesUrl
+      width 3.3rem
+      height 0.3rem
+      display flex
+      margin 0.2rem auto 0 auto
+      border 1px solid blue
+      .inputName
+        font-size 0.18rem
+        margin auto 0 auto 0.1rem
+      .inputUrl
+        width 2.7rem
+        height 0.238rem
+        border none
+        outline none
+        margin auto 0 auto 0.1rem
     .addtag
       width 3.3rem
       border 1px solid blue
       display flex
       flex-flow column
-      margin 0.1rem 0 0 0.207rem
+      margin 0.2rem 0 0 0.207rem
       font-size 0.16rem
       .chooseSort
         background-color gainsboro

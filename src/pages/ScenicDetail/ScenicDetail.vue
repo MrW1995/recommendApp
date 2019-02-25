@@ -70,7 +70,7 @@
                     <span class="commentDate">{{commentDate}}</span>
                   </div>
                   <div class="commentTextBox">
-                      <span class="commentText" @click="openReply">{{commentText}}
+                      <span class="commentText" @click="showCommentDetail(true)">{{commentText}}
                         <span class="ReplyComment">评论</span>
                       </span>
                   </div>
@@ -84,7 +84,7 @@
     <div class="shade" v-if="isShade" @click="closeShade(false)"></div>
     <ShowImg :img="img" ref="showImg"></ShowImg>
     <Comment ref="comment" v-on:changeState="changeState()"></Comment>
-    <Reply></Reply>
+    <Reply ref="commentDetail"></Reply>
   </div>
 </template>
 
@@ -154,8 +154,8 @@
       changeState(){
         this.isShade = false
       },
-      openReply(){
-        this.$store.commit('change_reply',true)
+      showCommentDetail(value){
+        this.$refs.commentDetail.showCommentDetail(value)
       }
     }
   }
@@ -167,11 +167,7 @@
   ul,li
     ulAndLi()
   .shade
-    width 3.75rem
-    height 6.67rem
-    background-color grey
-    position absolute
-    opacity 0.5
+    settingShade()
   .scenicDetail
     height 6.5rem
     .header

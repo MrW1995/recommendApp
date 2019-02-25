@@ -11,6 +11,8 @@ const Personal = () =>import('../pages/Personal/Personal')
 const Search = () =>import('../pages/SearchPage/Search')
 const ScenicDetail = () =>import('../pages/scenicDetail/scenicDetail')
 const PersonalEdit = () =>import('../pages/PersonalEdit/PersonalEdit')
+const SearchSources = () =>import('../pages/SearchSources/SearchSources')
+
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -46,6 +48,12 @@ export default new VueRouter({
     { //景点详情页
       path:'/scenicDetail',
       component:ScenicDetail,
+      meta:{
+        isShowFooter:false
+      }
+    },{ //资源搜索
+      path:'/searchSources',
+      component:SearchSources,
       meta:{
         isShowFooter:false
       }

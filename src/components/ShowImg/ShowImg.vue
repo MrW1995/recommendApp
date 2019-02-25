@@ -19,6 +19,7 @@
     },
     methods:{
       showImg(value){
+        console.log("123423")
         this.isShowImg = value
       }
     }

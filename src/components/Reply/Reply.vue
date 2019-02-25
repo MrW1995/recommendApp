@@ -1,9 +1,9 @@
 <template>
-  <mt-popup class="commentDetail" v-model="isShowReplyComment" :modal="false" popup-transition="popup-fade"  position="bottom">
+  <div class="commentDetail" v-if="isShowCommentDetail">
     <div class="headerBar">
       <div class="header">
-        <i class="iconfont icon-guanbi" @click="closeWindow"></i>
-        <span class="commentCount">{{commentCount}}评论</span>
+        <i class="iconfont icon-guanbi" @click="showCommentDetail(false)"></i>
+        <span class="commentCount">{{commentCount}}条回复</span>
       </div>
 
       <div class="replyDetail">
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="gudin">
-      <scroll class="wrapper" ref="listContent" :data="arr" :pulldown="pulldown" @pullingDown="loadData">
+      <scroll class="wrapper" ref="listContent" :data="arr" :pulldown="pulldown">
 
         <div class="replyContent">
           <div v-for="item in arr">
@@ -34,76 +34,42 @@
 
       </scroll>
     </div>
-  </mt-popup>
+  </div>
 </template>
 
 <script>
   import scroll from '../../components/Sroll/Scroll'
-  import {mapState} from 'vuex'
   export default {
     data(){
       return {
         commentCount:27,
         commentUser:'是可圈可点',
         pulldown:true,
-        arr:['3','2','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','3','2','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
+        arr:['3','2','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','3','2','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
+        isShowCommentDetail:false
       }
-    },
-    computed:{
-      isShowReplyComment:{
-        get(){
-          return this.$store.state.isShowReplyComment
-        },
-        set(value){
-          this.$store.commit('change_reply',value)
-        }
-      }
-    },
-    wacth:{
-      isShowReplyComment:{
-        abc(){
-          setTimeout(() =>{
-            this.scroll.refresh()
-          },20)
-        }
-      }
-
-    },
-    mounted(){
-
-
     },
     components:{
       scroll,
     },
     methods:{
-      loadData(){
-
-      },
-      closeWindow(){
-        console.log("--")
-        this.$store.commit('change_reply',false)
+      showCommentDetail(value){
+        this.isShowCommentDetail = value
       }
-
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .clearfloat
-    clear both
-  ul,li //除去ul li 的一些默认配置
-    -webkit-margin-before: 0em
-    -webkit-margin-after: 0em
-    -webkit-margin-start: 0px
-    -webkit-margin-end: 0px
-    -webkit-padding-start: 0px
-    text-align:left
-    list-style: none
-    font-size:0.15rem
+
+  @import "../../common/stylus/mixins.styl"
+  ul,li
+    ulAndLi()
   .commentDetail
-    height 6.67rem
+    height 7.5rem
+    position absolute
     display flex
+    background-color gainsboro
     flex-flow column
     .headerBar
       position fixed
@@ -127,6 +93,7 @@
           font-size 0.23rem
           font-weight bold
       .replyDetail
+        margin -0.05rem 0  0  0
         background-color white
         border-bottom 1px solid gainsboro
         .replyUser
@@ -154,14 +121,11 @@
       top:1.75rem
       bottom: 0
       overflow: hidden
-      /*background-color: darkgray*/
       .replyInfo
         display flex
         flex-flow column
         width 3.75rem
-
         border 1px solid gainsboro
-        /*background-color red*/
         .replyUser
           float left
           margin 0.09rem 0 0 0.18rem

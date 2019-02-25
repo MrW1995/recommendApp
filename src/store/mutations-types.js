@@ -8,17 +8,10 @@ export const RECEIVE_SCENIC = "receive_scenic"
 
 //同步请求
 
-export const CHANGE_PUBLISH = "change_publish"
-
-export const CHANGE_REPLY = "change_reply"
-
 export const CHANGE_LOGIN = "change_login"
 
 export const CHANGE_UPLOADER = "change_uploader"
 
-export const CHANGE_SOURCES = "change_sources"
-
-export const CHANGE_COMMENT = "change_comment"
 
 export const CHANGE_PERSONAL = "change_personal"
 

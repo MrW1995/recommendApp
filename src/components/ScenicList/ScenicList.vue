@@ -38,14 +38,13 @@
             <div class="pullDown" v-if="pullDownLoading"></div>
           </ul>
         </scroll>
-        <PublishScenic class="publishScenic"></PublishScenic>
+
       </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
   import scroll from '../../components/Sroll/Scroll'
-  import PublishScenic from '../PublishScenic/PublishScenic'
   export default {
 
     computed:{
@@ -54,7 +53,6 @@
     },
     components:{
       scroll,
-      PublishScenic
     },
     watch:{
       pullUpLoading(value){

@@ -3,12 +3,9 @@
 * */
 import {
   RECEIVE_SCENIC,
-  CHANGE_PUBLISH,
-  CHANGE_REPLY,
   CHANGE_LOGIN,
   CHANGE_UPLOADER,
-  CHANGE_SOURCES,
-  CHANGE_COMMENT,
+
   CHANGE_PERSONAL,
   CHANGE_SHOWSTATE,
   CHANGE_UPLOADING,
@@ -25,13 +22,6 @@ export default {
   },
 
   /*同步修改state的方法*/
-  [CHANGE_PUBLISH](state,boolVal){
-    state.isShowPublishScenic = boolVal
-  },
-
-  [CHANGE_REPLY](state,boolVal){
-    state.isShowReplyComment = boolVal
-  },
 
   [CHANGE_LOGIN](state,boolVal){
     state.isShowUserLogin = boolVal
@@ -41,13 +31,7 @@ export default {
     state.isShowUploaderImg = boolVal
   },
 
-  [CHANGE_SOURCES](state,boolVal){
-    state.isShowSourcesDetail = boolVal
-  },
 
-  [CHANGE_COMMENT](state,boolVal){
-    state.isShowUserComment = boolVal
-  },
 
   [CHANGE_PERSONAL](state,boolVal){
     state.isUserPersonalInfo = boolVal

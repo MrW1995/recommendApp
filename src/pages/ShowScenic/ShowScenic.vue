@@ -6,29 +6,35 @@
         <label class="select-label-2" :class="{changeColor2:changeColor2}" @click="changeColor('最热')">最热</label>
         <label class="select-label-3" :class="{changeColor3:changeColor3}" @click="changeColor('最近')">最近</label>
       </div>
-      <i class="iconfont icon-fabu" :class="{iconfontColor:iconfontColor}" @click="showPublish"  @touchstart="changeIconfontColorDown" @touchend="changeIconfontColorUp" slot="iconfont"></i>
+      <i class="iconfont icon-fabu" :class="{iconfontColor:iconfontColor}" @click="showPublish(true)"  @touchstart="changeIconfontColorDown" @touchend="changeIconfontColorUp" slot="iconfont"></i>
       <div class="sort" slot="headerSeaAndSort">
         <SearchInput v-if="!isShowSearchOrSortMenu"></SearchInput>
-        <LeftMenu v-else></LeftMenu>
+        <SortMenu :arr="arrs" :url="url" v-on:sendVal="sendVal" :SortVal="sort1" v-else></SortMenu>
       </div>
     </HeaderTop>
+    <PublishScenic ref="publishScenic"></PublishScenic>
     <ScenicList></ScenicList>
   </div>
 </template>
 
 <script>
   import HeaderTop from '../../components/HearderTop/HeaderTop'
-  import LeftMenu from '../../components/SortMenu/SortMenu'
+  import SortMenu from '../../components/SortMenu/SortMenu'
   import ScenicList from '../../components/ScenicList/ScenicList'
   import SearchInput from '../../components/Search/SearchInput'
+  import PublishScenic from '../../components/PublishScenic/PublishScenic'
   import {mapState} from 'vuex'
   export default {
     data(){
       return{
+        url:'query/sort',
         changeColor1:true,
         changeColor2:false,
         changeColor3:false,
-        iconfontColor:false
+        iconfontColor:false,
+        sort1:'综合',
+        sort2:'所有',
+        arrs:["所有", "公园", "风景区", "游乐园", "动物园", "植物园", "博物馆", "水族馆", "名胜古迹",],
       }
     },
     computed:{
@@ -36,44 +42,55 @@
     },
     components:{
       HeaderTop,
-      LeftMenu,
+      SortMenu,
       ScenicList,
-      SearchInput
+      SearchInput,
+      PublishScenic
     },
     methods:{
-      showPublish(){
-        this.$store.commit('change_publish',true)
+      showPublish(value){
+          this.$refs.publishScenic.showPublishScenic(value)
       },
       changeColor(value){
         if(value==='综合'){
           this.changeColor1 = true
           this.changeColor2 = false
           this.changeColor3 = false
+          this.sendReqSort(value)
         }else if(value==='最热'){
           this.changeColor1 = false
           this.changeColor2 = true
           this.changeColor3 = false
+          this.sendReqSort(value)
         }else {
           this.changeColor1 = false
           this.changeColor2 = false
           this.changeColor3 = true
+          this.sendReqSort(value)
         }
       },
       changeIconfontColorUp(){
-        console.log("333")
         this.iconfontColor = false
       },
       changeIconfontColorDown(){
-        console.log("123")
         this.iconfontColor = true
+      },
+      sendReqSort(value){
+        this.sort1 = value
+        console.log(value+this.sort2)
+
+      },
+      sendVal(value){
+        this.sort2 = value
+        console.log(this.sort2)
       }
+
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
   .select-sort
-    /*float: left*/
     display flex
     flex-direction: row
     font-size: 0.26rem

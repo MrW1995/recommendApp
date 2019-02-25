@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <div>
     <Scroll ref="wrapper":data="arr" class="PublishInfo">
       <div class="WrapperSetting">
         <div class="PublishMove">
@@ -22,37 +24,59 @@
         <div class="otherPeopleComment">
           <div class="otherPeopleCommentHeader">
             <span class="commentCount">{{commentCount}} 评论</span>
-            <span class="comment">评论</span>
+            <span class="comment" @click="ShowComment(true)">评论</span>
           </div>
-          <CommentList></CommentList>
+          <CommentList v-on:change="change"></CommentList>
         </div>
       </div>
     </Scroll>
-
+    </div>
+    <div class="shade" v-if="isShade" @click="closeShade(false)"></div>
+    <Comment ref="comment" v-on:changeState="changeState()"></Comment>
+    <SourcesUserReply ref="sourcesUserReply"></SourcesUserReply>
+  </div>
 </template>
 
 <script>
   import Scroll from '../../components/Sroll/Scroll'
   import CommentList from '../CommentList/CommentList'
+  import Comment from '../Comment/Comment'
+  import SourcesUserReply from '../SourcesUserReply/SourcesUserReply'
   export default {
     props: ['publishText', 'username', 'publishDate','arrImg','commentCount'],
     data(){
       return {
-        arr:['1']
+        arr:['1'],
+        img:'',
+        isShade:false,
       }
     },
     mounted(){
-      setTimeout(() =>{
-        this.$refs.wrapper.refresh()
-      },20)
+
     },
     components:{
       CommentList,
       Scroll,
+      Comment,
+      SourcesUserReply
     },
     methods:{
-      showUserComment(){
-        this.$store.commit('change_comment',true)
+      closeShade(value){
+        this.$refs.comment.showComment(value)
+        this.isShade = false
+      },
+      ShowComment(value){
+        this.$refs.comment.showComment(value)
+        this.isShade = true
+      },
+      changeState(){
+        this.isShade = false
+      },
+      change(value){
+        this.showUserComment(false,value)
+      },
+      showUserComment(boolVal,value){
+        this.$refs.sourcesUserReply.change(boolVal,value)
       }
     }
   }
@@ -62,7 +86,8 @@
   @import "../../common/stylus/mixins.styl"
   ul,li
     ulAndLi()
-
+  .shade
+    settingShade()
   .PublishInfo
     display flex
     flex-flow column

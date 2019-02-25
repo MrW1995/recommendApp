@@ -1,18 +1,18 @@
 <template>
-  <div id="allmap"></div>
+  <div>
+
+  </div>
 </template>
 
 <script>
+
   export default {
-    mounted(){
+   components:{
 
-    },
-    methods:{
-
-    }
+   }
   }
 </script>
-npm
+
 <style>
 
 </style>

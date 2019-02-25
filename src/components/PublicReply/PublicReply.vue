@@ -1,7 +1,7 @@
 <template>
-    <div class="publicReply">
+    <div class="publicReply" >
       <div class="publicReplyHeader">
-        <i class="iconfont icon-guanbi"></i>
+        <i class="iconfont icon-guanbi" @click="close"></i>
         <span class="replyTitle">详细评论</span>
       </div>
 
@@ -12,8 +12,8 @@
             <div class="replySetting">
               <img src="http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg" alt="" class="replyImg">
               <div class="replyUserNameAndDate">
-                <span class="replyDate">2019-01-10</span>
                 <span class="replyUserName">好的福建省</span>
+                <span class="replyDate">2019-01-10</span>
               </div>
             </div>
             <div class="commentDetail">
@@ -55,9 +55,17 @@
     },
     mounted(){
       setTimeout(() =>{
-        this.$refs.wrapper.refresh()
-      },20)
+        if(!this.scroll){
 
+        }else {
+          this.$refs.wrapper.$emit('refresh')
+        }
+      },20)
+    },
+    methods:{
+      close(){
+        this.$emit('close',true)
+      }
     },
     components:{
       Scroll
@@ -108,13 +116,12 @@ ul,li
           .replyUserNameAndDate
             font-size 0.13rem
             display flex
-            flex-flow column
             margin 0.1rem 0 0 0.05rem
+            .replyUserName
+              margin 0.2rem 0 0 0.05rem
             .replyDate
               font-size 0.05rem
-              margin-bottom 0.01rem
-            .replyUserName
-              margin 0 0 0 0
+              margin 0.2rem 0 0 1.80rem
         .commentDetail
           display flex
           font-size 0.15rem
@@ -140,7 +147,7 @@ ul,li
             margin 0.2rem 0 0 0.05rem
             font-size 0.13rem
           .replyUserDate
-            margin 0.2rem 0 0 1.85rem
+            margin 0.2rem 0 0 1.80rem
             font-size 0.13rem
         .replyBody
           display flex

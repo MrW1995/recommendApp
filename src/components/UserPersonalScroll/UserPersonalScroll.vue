@@ -23,7 +23,6 @@
     mounted(){
       setTimeout(() =>{
         this.refresh()
-
       },20)
     },
     methods:{
