@@ -1,15 +1,15 @@
 <template>
     <div class="commentList">
       <ul>
-        <li class="settingLi" v-for="(item,index) in 3" :key="index">
+        <li class="settingLi" v-for="(item,index) in userCommentStudy" :key="index">
           <div class="commentSetting">
             <img src="http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg" alt="" class="commentUserImg">
-            <span class="commentUserName">回家的时候</span>
-            <span class="commentDate">2019-01-10</span>
+            <span class="commentUserName">{{item.user.userName}}</span>
+            <span class="commentDate">{{dateFormat(new Date(item.commentDateTime))}}</span>
           </div>
           <div class="commentBody">
-            <span class="commentContent" @click="showUserComment(isCheck)">{{commentContent}}</span>
-            <span class="userReply">回复</span>
+            <span class="commentContent" @click="showUserComment(index)">{{item.commentContent}}</span>
+            <span class="userReply" @click="comment(item.user.userId)">评论</span>
           </div>
         </li>
       </ul>
@@ -20,9 +20,11 @@
 <script>
 
   export default {
+    props:{
+      userCommentStudy:Array,
+    },
     data(){
       return{
-        commentContent:'好地方更好的三个号发的是尽快发货的结合的苏菲不穿校服V型参加现场',
         isCheck:false
       }
     },
@@ -30,8 +32,16 @@
 
     },
     methods:{
-      showUserComment(){
-        this.$emit('change',this.commentContent)
+      dateFormat(value){
+        return this.util.dateFormat(value,1)
+      },
+      comment(value){
+        this.$emit('CommentUser',value)
+      },
+      showUserComment(index){
+        this.$router.push('/studyComment')
+        let studyUserCommentUsers = this.userCommentStudy[index].userCommentUsers
+        this.$store.commit('study_usercommentuser',studyUserCommentUsers)
       }
     }
   }
@@ -45,7 +55,7 @@
     display flex
     flex-flow column
     .settingLi
-      border-bottom 1px solid red
+      margin-bottom 0.05rem
       .commentSetting
         display flex
         .commentUserImg
@@ -57,7 +67,7 @@
           margin 0.22rem 0 0 0.05rem
         .commentDate
           font-size 0.13rem
-          margin 0.22rem 0 0 1.85rem
+          margin 0.22rem 0 0 1.5rem
       .commentBody
           display flex
           flex-flow column

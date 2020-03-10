@@ -1,72 +1,99 @@
 <template>
       <div>
-
-        <scroll class="wrapper" ref="listContent" :listenScroll="true" :pullup="true" :data="scenics" :pulldown="true">
+        <scroll class="wrapper" ref="listContent" :flagNum=2 :listenScroll="true" :pullup="true" :data="scenics" :pulldown="true">
           <ul>
-            <div class="pullUp" v-if="pullUpLoading"></div>
+            <div class="pullUp" v-if="pullUpLoading">
+              <div class="finishLoad" v-if="showFinish">
+                <span class="finishFont" v-if="loadingCount>0">以为你更新了{{loadingCount}}条数据</span>
+                <span class="finishFont" v-else>当前数据为最新数据</span>
+              </div>
+            </div>
               <li class="li-wrapper" v-for="(item,index) in scenics" :key="index">
                 <div class="top-box">
-
-                  <div class="left-box" :class="{noImg:item.img ===''}" @click="$router.push('/scenicDetail')">
-                    <span class="li-title" :class="{contentMany:item.recomment.length>44}">{{item.recomment}}</span>
+                  <div class="left-box" :class="{noImg:item.publishImg ===''}" @click="scenicDetail(index)">
+                    <span class="li-title" :class="{contentMany:item.publishTitle.length>44}">{{item.publishTitle}}</span>
                   </div>
-
-                  <div class="right-img" v-if="item.recomment.length<=44">
-                    <img class="li-picture" :src="item.img">
+                  <div class="right-img" v-if="item.publishTitle.length<=44 && item.publishTitle.length > 20">
+                    <img class="li-picture" :src="item.publishImgArr[0]">
                   </div>
-
                 </div>
-
-                <div class="midden-box-img" v-if="item.recomment.length>44 && item.img !=='' ">
-                  <img class="img1" :src="item.img">
-                  <img class="img2" :src="item.img">
-                  <img class="img3" :src="item.img">
+                <div class="midden-box-img" v-if="item.publishTitle.length>44 && item.img !=='' ">
+                  <img class="img1" :src="item.publishImgArr[0]">
+                  <img class="img2" :src="item.publishImgArr[1]">
+                  <img class="img3" :src="item.publishImgArr[2]">
                 </div>
-                <div class="midden-box-video" v-if="item.video">
-                  <video poster="video/head.png" class="video" controls="controls" preload="preload">
-                    <source :src="item.video" type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' >
-                  </video>
-                </div>
-
-                <div class="bottom-box" :class="{dateTime:item.date.length<=5}" >
-                  <span class="user-name" :class="{usernamechild:item.publishUser.username.length<3}">{{item.publishUser.username}}</span>
-                  <span class="comment-title">{{item.recommentContent.count}}评论</span>
-                  <span class="read-count">2.5K 浏览</span>
-                  <span class="publish-date">{{getDateTiem(item.date)}}</span>
+                <div class="bottom-box" :class="{dateTime:item.publishDateTime.length<=5}" >
+                  <span class="user-name" :class="{usernamechild:item.user.userName.length<3}">{{item.user.userName}}</span>
+                  <span class="comment-title">{{item.allComment}}评论</span>
+                  <span class="publish-date">{{dateFormat(new Date(item.publishDateTime))}}</span>
                 </div>
               </li>
-            <div class="pullDown" v-if="pullDownLoading"></div>
+              <div class="pullDown" v-if="pullDownLoading">
+                <div class="finishLoad" v-if="showFinish">
+                  <span class="finishFont" v-if="loadingCount>0">以为你加载了{{loadingCount}}条数据</span>
+                  <span class="finishFont" v-else>已经到底啦</span>
+                </div>
+              </div>
           </ul>
         </scroll>
-
       </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState,mapGetters} from 'vuex'
   import scroll from '../../components/Sroll/Scroll'
   export default {
-
+    data(){
+      return {
+        showFinish:false
+      }
+    },
     computed:{
-        ...mapState(['scenics','pullUpLoading','pullDownLoading']),
-
+        ...mapState(['scenics','loadingCount','pullUpLoading','pullDownLoading','allPages']),
     },
     components:{
       scroll,
     },
     watch:{
       pullUpLoading(value){
-        if(value)
-          this.$store.dispatch('receiveAb')
+        if(value == 1){
+          this.$store.commit('change_date',this.util.dateFormat(new Date())+" "+this.util.dateTimeFormat(new Date()))
+          this.$store.commit('change_pagenum',0)
+          this.$store.commit('change_loding','new')
+        }
       },
       pullDownLoading(value){
-        if(value)
-          this.$store.dispatch('receiveAb')
+        const allPages = this.allPages
+        const pageNum = parseInt(window.sessionStorage.getItem('pageNum'))
+        if(value == 1 && allPages !== pageNum){
+          this.$store.commit('change_loding','加载')
+        }
+      },
+      scenics(value){
+        this.$store.commit("change_uploading",0)
+        this.$store.commit('change_downloading',0)
+        if(value.length !== 6)
+          this.showFinish = true
+        setTimeout(()=>{
+          this.showFinish = false
+        },2000)
+        this.$store.commit('change_loding','1')
+      },
+      loadingCount(value){
+        if(value === 0){
+          this.$store.commit('change_loading_count',-1)
+          this.$store.commit("change_uploading",0)
+          this.$store.commit('change_downloading',0)
+          if(value.length !== 6)
+            this.showFinish = true
+          setTimeout(()=>{
+            this.showFinish = false
+          },2000)
+          this.$store.commit('change_loding','1')
+        }
       }
-
     },
     mounted() {
-      this.$store.dispatch('receiveAb')
       setTimeout(() =>{
         if(!this.scroll){
 
@@ -76,27 +103,12 @@
       },20)
     },
     methods:{
-      getDateTiem(date){
-        switch (date) {
-          case '刚刚':
-            return '刚刚'
-          case '10分钟前':
-            return '10分钟前'
-          case '30分钟前':
-            return '30分钟前'
-          case '1小时前':
-            return '1小时前'
-          case '3小时前':
-            return '3小时前'
-          case '6小时前':
-            return '6小时前'
-          case '12小时前':
-            return '12小时前'
-          case '24小时前':
-            return '24小时前'
-          default:
-            return date
-        }
+      dateFormat(value){
+        return this.util.dateFormat(value,1)
+      },
+      scenicDetail(index){
+        this.$store.commit('scenic_detail',index)
+        this.$router.push('/scenicDetail')
       },
     }
   }
@@ -109,6 +121,17 @@
   .pullUp
     settingLoadingPic()
     background-image: url("../../assets/imgs/loading_1.gif");
+  .finishLoad
+    width 3.75rem
+    height 0.3rem
+    display flex
+    background-color #666666
+    opacity 0.5
+    .finishFont
+      margin auto
+      font-weight bold
+      font-size 0.16rem
+      color white
   .pullDown
     settingLoadingPic()
     background-image: url("../../assets/imgs/loading_2.gif");
@@ -133,11 +156,11 @@
         .left-box
           margin 0.05rem 0 0 0.13rem
           &.noImg
-            margin 0.05rem 0 0.01rem 0.13rem
+            margin 0.05rem 0 0.05rem 0.13rem
           .li-title
             display:inline-block
             width: 2.5rem
-            margin: 0.2rem 0 0 0.05rem
+            margin: 0.2rem 0 0.1rem 0.05rem
             &.contentMany
               width 3.3rem
               margin 0 0 0.03rem 0.13rem
@@ -188,11 +211,9 @@
             margin-left 0.3rem
         .comment-title
           float left
-          margin-left:0.1rem
-        .read-count
-          margin-left 0.1rem
+          margin-left:0.4rem
         .publish-date
-          margin-left 0.1rem
+          margin-left 0.5rem
 
 
 </style>

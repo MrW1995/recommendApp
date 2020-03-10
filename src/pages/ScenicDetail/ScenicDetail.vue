@@ -7,16 +7,16 @@
     </div>
 
     <div class="contentbody">
-      <scroll :data="arrs" ref="wrapper" class="wrapper" :pulldown="true">
+      <scroll :data="singleScenic" ref="wrapper" class="wrapper" :pulldown="true">
         <div>
           <div class="scenicText">
             <div class="publishInfo">
-              <img src="http://wx3.sinaimg.cn/large/006DbPTnly1ftobouq00sj30dw0dwjsu.jpg" class="publishImg">
-              <span class="publishName">{{publishName}}</span>
-              <span class="publishDate">{{publishDate}}</span>
+              <img :src="singleScenic.user.personImg" class="publishImg">
+              <span class="publishName">{{singleScenic.user.userName}}</span>
+              <span class="publishDate">{{singleScenic.publishDateTime}}</span>
             </div>
             <div class="publishText">
-              <span class="text">{{text}}</span>
+              <span class="text">{{singleScenic.publishTitle}}</span>
             </div>
 
           </div>
@@ -24,55 +24,50 @@
           <div class="scenicImgAndVideo">
             <div class="scenicImg">
               <ul>
-                <li v-for="(item,index) in imgs" :key="index" v-if="!false">
+                <li v-for="(item,index) in singleScenic.publishImgArr" :key="index" v-if="!false">
                   <img :src="item" alt="" class="pictureSetting"  @click="showImg(item)">
                 </li>
               </ul>
-            </div>
-            <div class="scenicVideo" v-if="false">
-              <video poster="video/head.png" class="video" controls="controls" preload="preload">
-                <source src="../../assets/video/video.mp4" type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"' >
-              </video>
             </div>
           </div>
 
           <div class="tag">
             <div class="TagHeader"></div>
             <div class="aboutScenic">
-              <span class="ticket">门票: {{ticket}}</span>
+              <span class="ticket">门票: {{singleScenic.admissionTicket}}</span>
               <div class="scenicSort">
+                <span class="sortName">类别:</span>
                 <table>
                   <tr v-for="(scenicSortArr,index) in scenicSortArrs" :key="index">
                     <td v-for="(scenic,index) in scenicSortArr" :key="index">
-                      <mt-badge type="primary"> {{scenic}}公园</mt-badge>
+                      <mt-badge type="primary"> {{scenic}}</mt-badge>
                     </td>
                   </tr>
                 </table>
               </div>
               <div class="aboutAddress">
                 <span class="address">地址: </span>
-                <span class="addressSetting">{{address}}</span>
+                <span class="addressSetting">{{singleScenic.travelAddress}}</span>
               </div>
             </div>
 
           </div>
           <div class="comment">
             <div class="comentHeader">
-              <span class="commentCount">{{commentCount}} 评论</span>
+              <span class="commentCount">{{singleScenic.allComment}} 评论</span>
               <span class="commentOfUser" @click="ShowComment(true)">评论</span>
             </div>
             <div class="commentContent">
               <ul>
-                <li v-for="i in 8">
+                <li v-for="(item,index) in userCommetArticle" :key="index">
                   <div class="aboutComent">
-                    <img src="http://wx3.sinaimg.cn/large/006DbPTnly1ftobouq00sj30dw0dwjsu.jpg" class="CommentPicture">
-                    <span class="commentName">{{commentName}}</span>
-                    <span class="commentDate">{{commentDate}}</span>
+                    <img :src="item.user.personImg" class="CommentPicture">
+                    <span class="commentName">{{item.user.userName}}</span>
+                    <span class="commentDate">{{dateFormat(new Date(item.commentDateTime))}}</span>
                   </div>
                   <div class="commentTextBox">
-                      <span class="commentText" @click="showCommentDetail(true)">{{commentText}}
-                        <span class="ReplyComment">评论</span>
-                      </span>
+                      <span class="commentText" @click="showCommentDetail(true,index)">{{item.commentContent}}</span>
+                      <span class="ReplyComment" @click="CommentUser(true,item.user.userId)">评论</span>
                   </div>
                 </li>
               </ul>
@@ -83,7 +78,7 @@
     </div>
     <div class="shade" v-if="isShade" @click="closeShade(false)"></div>
     <ShowImg :img="img" ref="showImg"></ShowImg>
-    <Comment ref="comment" v-on:changeState="changeState()"></Comment>
+    <Comment ref="comment" @closeShade ="close" :articleId="singleScenic.publishTravelId" v-on:changeState="changeState()"></Comment>
     <Reply ref="commentDetail"></Reply>
   </div>
 </template>
@@ -93,53 +88,51 @@
   import Comment from '../../components/Comment/Comment'
   import Reply from '../../components/Reply/Reply'
   import ShowImg from '../../components/ShowImg/ShowImg'
+  import {mapState} from 'vuex'
   export default {
     data(){
       return {
+        url:'',
+        flag:'',
         popupVisible:false,
-        arrs:['1'],
-        publishName:'好地方角度',
-        publishDate:'19-01-05 09:48',
-        text:'好的东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的好的公司非广东省分行反倒是范德萨熊熊的的',
-        imgs:['http://pic11.nipic.com/20101126/3367900_112731025783_2.jpg',
-          'http://5b0988e595225.cdn.sohucs.com/images/20181218/b93d89bf97ef4315b6a4d90c9ce72c3d.jpeg',
-          'http://pic25.nipic.com/20121205/391129_153756705000_2.jpg',
-          'http://pic25.nipic.com/20121205/391129_153756705000_2.jpg',
-          ],
-        video:"../../assets/video/video.mp4",
-        ticket:'免费',
-        scenicSort:['1','2','3','4','5','6','7','8'],
-        address:"福建省福州市闽侯县上街镇文贤路1号闽江学院",
-        commentCount:27,
-        commentName:'会受到广泛',
-        commentDate:'19-01-05 03:58',
-        commentText:'的个所所gdfdsasff所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所',
+        scenicSort:[],
         img:'',
         isShade:false,
       }
     },
     computed:{
+      ...mapState(['singleScenic','userCommetArticle','codeFlag']),
       scenicSortArrs () {
-        const {scenicSort} = this
-        return this.util.splitArr(scenicSort,4)
-      }
+        return this.util.splitArr(this.singleScenic.sorts,4)
+      },
     },
-    watch:{
 
-    },
     components:{
       scroll,
       Comment,
       Reply,
       ShowImg,
     },
-    mounted(){
-
-    },
     methods:{
-      ShowComment(value){
-        this.$refs.comment.showComment(value)
+      CommentUser(boolVal,userId){
+        this.url = '/user/comment/add'
+        this.$refs.comment.showUserComment(boolVal,userId,this.url,1)
         this.isShade = true
+      },
+      dateFormat(value){
+        return this.util.dateFormat(value,1)
+      },
+      ShowComment(value){
+        if (window.localStorage.getItem('token')!= ''){
+          this.url = '/article/comment/add'
+          this.$refs.comment.showComment(value,this.url)
+          this.isShade = true
+        }else{
+          this.$store.commit('change_login',true)
+        }
+      },
+      close(){
+        this.isShade = false
       },
       showImg(value){
         this.img = value
@@ -154,8 +147,8 @@
       changeState(){
         this.isShade = false
       },
-      showCommentDetail(value){
-        this.$refs.commentDetail.showCommentDetail(value)
+      showCommentDetail(value,index){
+        this.$router.push('/userComment')
       }
     }
   }
@@ -239,6 +232,10 @@
             flex-flow column
             margin 0.05rem 0 0.05rem 0.36rem
             font-size 0.16rem
+            .scenicSort
+              display flex
+              .sortName
+                margin auto 0 auto 0
             .aboutAddress
               display flex
               .addressSetting
@@ -275,5 +272,5 @@
             margin 0.05rem 0 0.05rem 0.36rem
             .ReplyComment
               color blue
-              margin 0 0 0 0.1rem
+              margin 0.03rem 0 0 2.8rem
 </style>

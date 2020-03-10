@@ -8,13 +8,15 @@ import './mock/mockServer'
 import store from './store'
 import Calendar from 'vue-mobile-calendar'
 import Distpicker from 'v-distpicker'
+import VueJsonp from 'vue-jsonp'
 import './Utils/Utils'
 import '../static/jquery/jquery-3.3.1.min'
+/*import './assets/util/vconsole'*/
 
 import {  Button,Tabbar,TabItem,Search,Cell,Popup,
           Navbar,TabContainer,TabContainerItem,Badge,
           Switch,Radio,DatetimePicker,Picker} from "mint-ui"
-
+Vue.use(VueJsonp)
 Vue.config.productionTip = false
 Vue.component(Button.name,Button)
 Vue.component(Tabbar.name,Tabbar)

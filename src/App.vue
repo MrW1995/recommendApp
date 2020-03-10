@@ -11,7 +11,6 @@ import FootBar from './components/FooterBar/FooterBar'
 export default {
   components:{
     FootBar,
-
   }
 }
 </script>

@@ -6,14 +6,14 @@
 
     </div>
     <div class="uploaderMove">
-      <uploader url="http://cn.ynhdkc.com/admin/uploadapiv2/uploadpics" maxLength="1" isShow="1"></uploader>
+      <uploader url="#"  maxLength="1" isShow="0"></uploader>
 
     </div>
-    <div class="btn" @click="upload">上传</div>
   </mt-popup>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   export default {
     data(){
       return {
@@ -21,6 +21,7 @@
       }
     },
     computed:{
+      ...mapState(['img_upload_cache','img_upload_flag']),
       isShowUploaderImg:{
         get(){
           return this.$store.state.isShowUploaderImg
@@ -30,13 +31,24 @@
         }
       }
     },
+    watch:{
+      img_upload_flag(newVal,oldVal) {
+        if (newVal > oldVal) {
+          setTimeout(() => {
+            this.upload(this.img_upload_cache)
+          }, 500)
+        } else {
+        }
+      }
+    },
     methods:{
       closeUploader(){
         this.$store.commit('change_uploader',false)
       },
-      upload () {
-        this.$store.commit('set_img_status', 'uploading')
+      upload (arr) {
+        this.$store.dispatch('uploadImg',arr)
       },
+
     }
   }
 </script>

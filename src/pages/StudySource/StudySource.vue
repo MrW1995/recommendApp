@@ -9,7 +9,7 @@
       </div>
       <div class="SearchAndSort" slot="headerSeaAndSort">
         <div class="Sourcessort">
-          <SortMenu :arr="arrs" :url="url" :SortVal="sortVal" v-on:sendVal="sendVal"></SortMenu>
+          <SortMenu :arr="sortList"  :SortVal="studySort" v-on:sendVal="sendVal"></SortMenu>
         </div>
         <div class="SourcesSearch">
           <i class="iconfont icon-sousuo" @click="$router.push('/searchSources')"></i>
@@ -18,19 +18,19 @@
     </HearderTop>
     <div class="StudySortPlat" :class="{showDisplay:chooseDisplay}">
         <ul>
-          <li @click="choose('综合')" :class="{changeColor:sortVal == '综合'}">综合</li>
-          <li @click="choose('最新')" :class="{changeColor:sortVal == '最新'}">最新</li>
-          <li @click="choose('最热')" :class="{changeColor:sortVal == '最热'}">最热</li>
+          <li @click="choose('new')" :class="{change:sorts == 'new'}">综合</li>
+          <li @click="choose('最新')" :class="{change:sorts == '最新'}">最新</li>
+          <li @click="choose('最热')" :class="{change:sorts == '最热'}">最热</li>
         </ul>
     </div>
-    <div class="SourcesBody">
-      <Scroll :data="arr" class="wrapper" ref="wrapper">
+    <div class="SourcesBody" >
+      <Scroll :data="studyArr" class="wrapper" ref="wrapper" :loading=1 :pulldown="true">
         <ul>
-          <li v-for="item in arr">
+          <li v-for="(item,index) in studyArr" :key="index">
             <div class="individualSourceInfo">
-              <span class="individualSourceInfoContext" @click="showDetail(true)">{{SourceInfoContext}}
+              <span class="individualSourceInfoContext" @click="showDetail(index)">{{item.studyContent}}
                 <table class="foreachImg">
-                  <tr v-for="(SourceImg,index) in SourcesImg" :key="index">
+                  <tr v-for="(SourceImg,index) in SourcesImg(item.studyImg)" :key="index">
                     <td v-for="(img,index) in SourceImg" :key="index">
                       <img class="SourceImg" :src="img" >
                     </td>
@@ -38,77 +38,113 @@
                 </table>
               </span>
               <div class="publisInfo">
-                <publishUserName></publishUserName>
+                <div class="publishUserName">
+                  <span class="user-name" >{{item.user.userName}}</span>
+                  <span class="comment-title">{{item.studyCount}}评论</span>
+                  <span class="publish-date">{{dateFormat(new Date(item.studyDateTime))}}</span>
+                </div>
               </div>
-
             </div>
           </li>
+          <div class="loadingState" v-if="studyPullDown"></div>
+          <div class="fontAlert" v-if="showState">
+            <span class="fontSetting" v-if="studyCount>0">以为你加载{{studyCount}}条数据</span>
+            <span class="fontSetting" v-else>到底啦</span>
+          </div>
         </ul>
       </Scroll>
     </div>
-    <SourcesDetail ref="sourcesDetail"></SourcesDetail>
-    <PublishSource ref="publishSource"></PublishSource>
-    <SearchSources></SearchSources>
+
+    <Login></Login>
   </div>
 </template>
 
 <script>
   import Scroll from '../../components/Sroll/Scroll'
-  import publishUserName from '../../components/PublishInfo/PublishUserName'
-  import SourcesDetail from '../../components/SourcesDetail/SourcesDetail'
   import HearderTop from '../../components/HearderTop/HeaderTop'
   import SortMenu from '../../components/SortMenu/SortMenu'
-  import PublishSource from '../../components/PublishSource/PublishSource'
-  import SearchSources from '../SearchSources/SearchSources'
+  import Login from '../../components/Login/Login'
+  import {mapState} from 'vuex'
+  import { MessageBox } from 'mint-ui'
   export default {
     data(){
       return {
-        sortVal:'综合',
+        sorts:'new',
         checkNum:0,
-        sort2:'所有',
+        studySort:'所有',
+        loading:'',
         chooseDisplay:true,
         url:'query/sort1',
-        arr:['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
-        SourceInfoContext:'好几十个的广泛的双方都 股见到过热豆腐几个人抚养费的托管人关于发给他如果人也非法的声音扔的发热管他人',
-        arrImg:['http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg',
-          'http://img.daimg.com/uploads/allimg/120319/1-12031921534Y24.jpg'],
-        arrs:["所有", "语", "数","英","史","地","生"],
+        arrs:["所有", "语文", "数学","英语","历史","地理","生物","物理","化学"],
+        url1:'/get/study/sort'
       }
     },
     computed:{
+      ...mapState(['studyArr','studyPullDown','executeMethod','pageNum','showState','studyCount','codeFlag','sortList']),
       SourcesImg(){
-        const {arrImg} = this
-        return this.util.splitArr(arrImg,3)
+        return function(value){
+          return this.util.splitArr(value,3)
+        }
+      },
+    },
+    watch:{
+      executeMethod(){
+        if(this.studyPullDown){
+          this.queryStudySources()
+        }
+      },
+      codeFlag(value){
+        if(value){
+          MessageBox('提示', '操作成功');
+        }
+      },
+      showState(){
+        setTimeout(()=>{
+          this.$store.commit('show_state',false)
+        },2000)
+      },
+      studyArr(){
+        this.$store.commit('study_pulldown',false)
+        this.$store.commit('execute_method',false)
+        this.$store.commit('show_state',true)
+        setTimeout(()=>{
+          this.$store.commit('show_state',false)
+        },2000)
       }
     },
     mounted(){
-      this.$refs.wrapper.refresh()
+      let url = this.url1
+      let num = 1
+      this.$store.dispatch("getSort",{url,num})
+      this.$store.commit('pagenumm',1)
+      this.queryStudySources()
     },
     components:{
       Scroll,
-      publishUserName,
-      SourcesDetail,
       HearderTop,
       SortMenu,
-      PublishSource,
-      SearchSources
+      Login,
     },
     methods:{
-      showDetail(value){
-        this.$refs.sourcesDetail.showSourceDetail(value)
+      dateFormat(value){
+        return this.util.dateFormat(value,1)
+       },
+      showDetail(index){
+        this.$store.commit('study_detail',index)
+        this.$router.push('/sourceDetail')
       },
       openPublish(value){
-        this.$refs.publishSource.openPublishSource(value)
+        console.log(value)
+        if(window.localStorage.getItem("token"))
+          this.$router.push("/publishSource")
+        else
+          this.$store.commit('change_login',true)
+
       },
       sendVal(value){
-        this.sort2 = value
+        this.studySort = value
+        this.$store.commit('pagenumm',1)
+        this.queryStudySources()
       },
       sortStudy(value){
         if(value === 1){
@@ -118,12 +154,17 @@
           this.checkNum = 1
           this.chooseDisplay = false
         }
-
+      },
+      queryStudySources(){
+        let dateTime = ''
+        console.log({"studySort":this.studySort,"sorts":this.sorts,"loading":this.loading,"dateTime":dateTime,"pageNum":this.pageNum})
+        this.$store.dispatch('queryStudySource',{"studySort":this.studySort,"sorts":this.sorts,"loading":this.loading,"dateTime":dateTime,"pageNum":this.pageNum})
       },
       choose(value){
+        this.$store.commit('pagenumm',1)
         this.chooseDisplay = true
-        this.sortVal = value
-        console.log(this.sortVal + " : "+this.sort2)
+        this.sorts = value
+        this.queryStudySources()
       }
 
     }
@@ -136,8 +177,8 @@
     ulAndLi()
 
   .SourcesList
+    height 6.67rem
     display flex
-    flex-flow column
     .StudySortPlat
       width 0.6rem
       height 1rem
@@ -153,7 +194,7 @@
         line-height 0.3rem
         color white
         margin 0 0 0 0.08rem
-        &.changeColor
+        &.change
           color red
           font-weight bold
     .SourcesHeader
@@ -180,7 +221,7 @@
       .Sourcessort
         width 3.2rem
         height 0.4rem
-        background-color white
+        box-shadow: 0 0 1px gainsboro;
       .SourcesSearch
         width 0.6rem
         height 0.4rem
@@ -193,10 +234,9 @@
     .SourcesBody
       width 3.75rem
       display flex
-      margin-top 0.8rem
+      margin-top 0.4rem
       .wrapper
         overflow hidden
-        height 5.29rem
         .individualSourceInfo
           width 3.75rem
           border-bottom 1px solid black
@@ -206,10 +246,46 @@
             width 3.2rem
             margin 0.05rem auto 0 auto
           .foreachImg
-            margin auto
+            margin 0.05rem auto 0 auto
             .SourceImg
               width 0.6rem
               height 0.6rem
           .publisInfo
             margin 0 0 0.05rem 0.5rem
+            .publishUserName
+              display flex
+              .user-name
+                width:0.55rem
+                display: inline-block
+                overflow:hidden
+                white-space:nowrap
+                text-overflow:ellipsis
+                &.usernamechild
+                  width 0.3rem
+                  margin-left 0.3rem
+              .user-name
+                float left
+                margin-left:0.2rem
+              .comment-title
+                float left
+                margin-left:0.2rem
+              .publish-date
+                margin 0 0 0 0.3rem
+  .loadingState
+    width 3.75rem
+    height 0.4rem
+    background-image url("../../assets/imgs/loadingPic.gif")
+    background-repeat no-repeat
+    background-position center
+  .fontAlert
+    width 3.75rem
+    height 0.4rem
+    background-color grey
+    opacity 0.3
+    display flex
+    .fontSetting
+      margin auto
+      font-size 0.18rem
+      font-weight bold
+      color white
 </style>

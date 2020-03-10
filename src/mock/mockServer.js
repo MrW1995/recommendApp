@@ -12,3 +12,4 @@ Mock.mock('/querySenics/none',{code:0,data:data.senics})
 
 
 
+

@@ -4,48 +4,27 @@
       <span class="loginText">登录</span>
     </div>
     <div class="loginBody">
-      <mt-navbar v-model="selected">
-        <mt-tab-item id="1" >账号登入</mt-tab-item>
-        <mt-tab-item id="2">手机登入</mt-tab-item>
-      </mt-navbar>
 
       <mt-tab-container v-model="selected">
         <mt-tab-container-item id="1">
+            <div class="msgTitle" v-if="showMsg">
+              <span class="setFont">{{msg}}</span>
+            </div>
             <div class="userAcount">
-               <span class="userAcountFont">用户名</span><input type="text" class="publishSetting userNameInput" placeholder="用户名/手机号">
+               <span class="userAcountFont">用户名</span><input type="text" class="publishSetting userNameInput"v-model="userName" placeholder="请输入用户名">
             </div>
             <div class="userPwd">
-              <span class="userPwdFont">密码</span><input type="password" v-model="pwd" class="publishSetting pwdInput" placeholder="请输入密码" v-if="!isShowPwd">
-              <input type="text" placeholder="请输入密码" v-model="pwd" class="publishSetting pwdInput" v-else>
+              <span class="userPwdFont">密码</span><input type="password" v-model="password" class="publishSetting pwdInput" placeholder="请输入密码" v-if="!isShowPwd">
+              <input type="text" placeholder="请输入密码" v-model="password" class="publishSetting pwdInput" v-else>
               <i :class="isShowPwd?'iconfont icon-xianshi':'iconfont icon-guanbixianshi'" class="showPwd" @click="isShowPwd = !isShowPwd"></i>
             </div>
-            <div class="validate">
-              <span class="validateFont">验证码</span><input type="text" class="publishSetting validateInput">
-              <div class="validatePicture"></div>
-            </div>
+
             <div class="loginBtn">
               <div class="enter" @click="login">
                 <span class="enterFont">登入</span>
               </div>
-              <div class="cancel" @click="closeLogin">
-                <span class="cancelFont">取消</span>
-              </div>
             </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="2">
-          <div class="upload">
-            <div class="phoneLogin">
-              <div class="phoneNumber">
-                <input type="text" placeholder="请输入正确的手机号" class="phoneInput" v-model="inputNumber">
-                <div class="sendMessage" v-if="isShowSendNumber">
-                  <span class="getValidate" >获取验证码</span>
-                </div>
-              </div>
-              <div class="phoneValidate">
-                <input type="text" placeholder="请输入验证码" class="validateNumber">
-              </div>
-            </div>
-          </div>
+            <span class="userRegister" @click="$router.push('/personaledit')">用户注册</span>
         </mt-tab-container-item>
       </mt-tab-container>
     </div>
@@ -54,50 +33,46 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {MessageBox } from 'mint-ui'
   export default {
     data(){
       return {
-        pwd:'',
+        userName:'',
+        password:'',
         isShowPwd:false,
-        selected:'1',
-        imgUrl1:'iconfont icon-xianshi',
-        imgUrl2:'iconfont icon-guanbixianshi',
+        selected:"1",
         isShowSendNumber:false,
-        inputNumber:'',
+        showMsg:false
+       /* inputNumber:'',*/
       }
     },
     computed:{
+        ...mapState(['msg','code']),
         isShowUserLogin:{
           get(){
-
             return this.$store.state.isShowUserLogin
           },
           set(value){
             this.$store.state.isShowUserLogin = value
           }
-        }
+        },
+
 
     },
     watch:{
-      inputNumber(){
-        const reg = /^[1][3,4,5,7,8][0-9]{9}$/
-        console.log("123")
-        if(reg.test(this.inputNumber)) {
-          console.log("123456")
-          this.isShowSendNumber = true
-        }else if(this.inputNumber.length >= 11){
-          this.isShowSendNumber = false
-          let instance = MessageBox('提示','请输入正确的手机号码')
-        }else{
-          this.isShowSendNumber = false
+      code(value){
+        if(value !== 0){
+          this.showMsg = true
         }
+        setTimeout(()=>{
+          this.showMsg = false
+        },2000)
       }
-
     },
     methods:{
       login(){
-        console.log("123")
+        let userName = this.userName
+        let password = this.password
+        this.$store.dispatch("userLogin",{userName,password})
       },
       closeLogin(){
         this.$store.commit('change_login',false)
@@ -125,10 +100,21 @@
   .loginBody
     font-size 0.2rem
     width 3rem
-    height 3rem
+    height 2.1rem
     display flex
     flex-flow column
     background-color #F8F8F8
+    .msgTitle
+      position absolute
+      width 3rem
+      color white
+      font-weight bold
+      background-color grey
+      opacity 0.3
+      font-size 0.18rem
+      display flex
+      .setFont
+        margin auto
     .userAcount
       display flex
       margin 0.28rem 0 0.05rem 0.15rem
@@ -165,11 +151,12 @@
     .loginBtn
       font-size 0.23rem
       display flex
-      margin 0.3rem 0 0 0.9rem
+      margin 0.3rem 0 0 0
       .enter
         display flex
-        width 0.8rem
+        width 2.2rem
         height 0.4rem
+        margin 0 auto 0 auto
         border-radius 0.06rem
         background-color #3366FF
         .enterFont
@@ -215,4 +202,9 @@
             border none
             width 3.75rem
             height 0.3rem
+    .userRegister
+      display flex
+      margin 0.08rem 0 0 0.05rem
+      font-size 0.16rem
+      color grey
 </style>

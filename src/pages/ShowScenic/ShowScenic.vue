@@ -2,18 +2,19 @@
   <div>
     <HeaderTop>
       <div class="select-sort" :class="{addbold:false}" slot="headerbar">
-        <label class="select-label-1" :class="{changeColor1:changeColor1}" @click="changeColor('综合')">综合</label>
-        <label class="select-label-2" :class="{changeColor2:changeColor2}" @click="changeColor('最热')">最热</label>
-        <label class="select-label-3" :class="{changeColor3:changeColor3}" @click="changeColor('最近')">最近</label>
+        <label class="select-label-1" :class="{changeColor:chooseSort === '综合'}" @click="changeSort('综合')">综合</label>
+        <label class="select-label-2" :class="{changeColor:chooseSort === '最热'}" @click="changeSort('最热')">最热</label>
+        <label class="select-label-3" :class="{changeColor:chooseSort === '最近'}" @click="changeSort('最近')">最近</label>
       </div>
       <i class="iconfont icon-fabu" :class="{iconfontColor:iconfontColor}" @click="showPublish(true)"  @touchstart="changeIconfontColorDown" @touchend="changeIconfontColorUp" slot="iconfont"></i>
       <div class="sort" slot="headerSeaAndSort">
         <SearchInput v-if="!isShowSearchOrSortMenu"></SearchInput>
-        <SortMenu :arr="arrs" :url="url" v-on:sendVal="sendVal" :SortVal="sort1" v-else></SortMenu>
+        <SortMenu :arr="sortList" :url="url" v-on:sendVal="sendVal" :SortVal="travelSort" v-else></SortMenu>
       </div>
     </HeaderTop>
-    <PublishScenic ref="publishScenic"></PublishScenic>
+
     <ScenicList></ScenicList>
+    <Login></Login>
   </div>
 </template>
 
@@ -22,51 +23,94 @@
   import SortMenu from '../../components/SortMenu/SortMenu'
   import ScenicList from '../../components/ScenicList/ScenicList'
   import SearchInput from '../../components/Search/SearchInput'
-  import PublishScenic from '../../components/PublishScenic/PublishScenic'
+  import PublishScenic from '../PublishScenic/PublishScenic'
+  import Login from '../../components/Login/Login'
   import {mapState} from 'vuex'
+  import { MessageBox } from 'mint-ui'
   export default {
     data(){
       return{
         url:'query/sort',
-        changeColor1:true,
-        changeColor2:false,
-        changeColor3:false,
         iconfontColor:false,
-        sort1:'综合',
-        sort2:'所有',
-        arrs:["所有", "公园", "风景区", "游乐园", "动物园", "植物园", "博物馆", "水族馆", "名胜古迹",],
+        chooseSort:'综合',
+        travelSort:'所有',
+        url:'/get/travel/sort'
       }
     },
     computed:{
-      ...mapState(['isShowSearchOrSortMenu'])
+      ...mapState(['scenics','isShowSearchOrSortMenu','token','loading','pageNum','dateTime','codeFlag','msgContent','sortList'])
     },
     components:{
       HeaderTop,
       SortMenu,
       ScenicList,
       SearchInput,
-      PublishScenic
+      PublishScenic,
+      Login,
+    },
+    mounted(){
+      let url = this.url
+      let num = 1
+      this.$store.dispatch("getSort",{url,num})
+      this.queryScenic()
+    },
+    watch:{
+      loading(value){
+        if(value === 'new' || value === '加载' || value === '最热' || value === '最近' || value === '最新' || value === 'travelSort'){
+          if(this.loading === 'new'){
+            this.chooseSort = '综合'
+            this.travelSort = '所有'
+            this.queryScenic()
+          }else {
+            this.queryScenic()
+          }
+        }
+      },
+      codeFlag(value){
+        if(value){
+          this.$refs.publishScenic.showPublishScenic(false)
+          MessageBox('提示', '操作成功');
+        }
+      },
+      sortList(){
+
+      }
     },
     methods:{
-      showPublish(value){
-          this.$refs.publishScenic.showPublishScenic(value)
+      open() {
+        this.$message({
+          message: this.msgContent,
+          type: 'success'
+        });
       },
-      changeColor(value){
+      showPublish(value){
+        if(window.localStorage.getItem("token"))
+          this.$router.push("/publishScenic")
+        else
+          this.$store.commit('change_login',true)
+      },
+      userLogin(){
+        this.$store.commit('change_login',true)
+      },
+      changeSort(value){
         if(value==='综合'){
-          this.changeColor1 = true
-          this.changeColor2 = false
-          this.changeColor3 = false
-          this.sendReqSort(value)
+          this.chooseSort = value
+          this.$store.commit('change_pagenum',0)
+          this.$store.commit('change_date','')
+          this.$store.commit('change_loding','最新')
+
         }else if(value==='最热'){
-          this.changeColor1 = false
-          this.changeColor2 = true
-          this.changeColor3 = false
-          this.sendReqSort(value)
+          this.chooseSort = value
+          this.$store.commit('change_pagenum',0)
+          this.$store.commit('change_date','')
+          this.$store.commit('change_loding','最热')
+
         }else {
-          this.changeColor1 = false
-          this.changeColor2 = false
-          this.changeColor3 = true
-          this.sendReqSort(value)
+          this.chooseSort = value
+          this.$store.commit('change_pagenum',0)
+          this.$store.commit('change_date','')
+          this.$store.commit('change_loding','最近')
+
         }
       },
       changeIconfontColorUp(){
@@ -75,14 +119,21 @@
       changeIconfontColorDown(){
         this.iconfontColor = true
       },
-      sendReqSort(value){
-        this.sort1 = value
-        console.log(value+this.sort2)
-
+      queryScenic(){
+        const travelSort = this.travelSort
+        const sorts = this.chooseSort
+        const loading = this.loading
+        const pageNum = this.pageNum
+        const dateTime = this.dateTime
+        console.log("travelSort "+this.travelSort,"sorts "+sorts,"loading "+loading,"dateTime "+dateTime,"pageNum "+this.pageNum)
+        if(this.loading === '1')
+          return
+        this.$store.dispatch('queryScenic',{travelSort,sorts,loading,dateTime,pageNum})
       },
       sendVal(value){
-        this.sort2 = value
-        console.log(this.sort2)
+        this.travelSort = value
+        this.$store.commit('change_pagenum',0)
+        this.$store.commit('change_loding','travelSort')
       }
 
     }
@@ -97,15 +148,15 @@
     margin 0.01rem 0 0 0.8rem
     .select-label-1
       margin 0 0 0 0
-      &.changeColor1
+      &.changeColor
         color red
     .select-label-2
       margin 0 0 0 0.27rem
-      &.changeColor2
+      &.changeColor
         color red
     .select-label-3
       margin 0 0 0 0.27rem
-      &.changeColor3
+      &.changeColor
         color red
   .icon-fabu
     font-size:0.26rem

@@ -10,7 +10,6 @@
   export default {
     props:{
       arr:Array,
-      url:String,
       SortVal:String
     },
     data(){
@@ -18,13 +17,19 @@
         active:0,
       }
     },
+
+    wacth:{
+      SortVal(newVal,oldVal){
+     
+      },
+    },
+
     methods:{
       toggle(index,item){
         this.active=index
         this.$emit('sendVal',item)
-        console.log(this.url +" : "+this.SortVal)
-        console.log(index,item)
-      }
+      },
+
     }
   }
 
@@ -35,6 +40,7 @@
     width: 100%
     overflow:hidden
     z-index 100
+    height 0.38rem
     color red
     nav
       padding: 0 0.13rem

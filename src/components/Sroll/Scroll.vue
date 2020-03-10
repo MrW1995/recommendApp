@@ -1,15 +1,25 @@
 <template>
   <div ref="wrapper">
     <slot></slot>
-
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
-
   export default {
     props: {
+      loading:{
+        type:Number,
+        default:0,
+      },
+      scroY:{
+        type:Number,
+        default:0
+      },
+      flagNum:{
+        type:Number,
+        default:0
+      },
       probeType: {
         type: Number,
         default: 3
@@ -78,24 +88,30 @@
         }
 
         if (this.pulldown) {
+
           //监听即将滚动到底部，监听此事件即可
           this.scroll.on('scrollEnd', () => {
             if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-              console.log("123")
-              this.$store.commit('change_downloading',true)
-              this.scroll.destroy()
+              if(this.loading === 1){
+                this.$store.commit('study_pulldown',true)
+                this.$store.commit('execute_method',true)
+              }
+              if(this.flagNum === 3){
+                this.$store.commit("change_laugh",true)
+              }else {
+                this.$store.commit('change_downloading',1)
+              }
+
               this.$emit('scrollToEnd')
             }
           })
         }
-
         if (this.pullup) {
-
           //监听即将滚动顶部，监听此事件即可
+
           this.scroll.on('scrollEnd', () => {
             if (Math.abs(this.scroll.y) <= (this.scroll.minScrollY)) {
-              this.$store.commit('change_uploading',true)
-              this.scroll.destroy()
+              this.$store.commit('change_uploading',1)
               this.$emit('scrollToEnd')
             }
           })
@@ -106,14 +122,8 @@
           })
         }
       },
-
       disable() {
         this.scroll && this.scroll.disable()
-      },
-      show(){
-          // this.scroll.on('scroll',() =>{
-          //   console.log(123)
-          // })
       },
       enable() {
         this.scroll && this.scroll.enable()
@@ -136,13 +146,15 @@
       },
       scrolly(value) {
 
-        if (value / 2 < 25) {
-
-          this.$store.commit('change_showstate', false)
+        if( this.flagNum === 1 && value / 2 > this.scroY){
+            console.log(value)
+            this.$store.commit('loading_vague_flag',true)
+            this.$store.commit('loading_vague',this.flagNum)
         }
 
-        else{
-
+        if (this.flagNum === 2 && value / 2 < 25) {
+          this.$store.commit('change_showstate', false)
+        }else if(this.flagNum === 2){
           this.$store.commit('change_showstate',true)
         }
       }
